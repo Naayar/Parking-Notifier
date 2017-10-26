@@ -1,0 +1,1 @@
+<p> tu clave de usuario es <?= $value ?></p>

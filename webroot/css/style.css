@@ -1,0 +1,96 @@
+.log{
+	margin-top: 25%;
+	margin-bottom: 50%;
+}
+
+html {
+  min-height: 100%;
+  position: relative;
+}
+
+.navbar{
+	margin-bottom: 0;
+}
+
+body{
+	background-color: #eee;	
+	margin: 0;
+ 	margin-bottom: 150px;
+}
+
+
+.login{
+	padding-top: 5%;
+}
+
+footer{
+  background-color: #777;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  color: white;
+}
+
+.navbar{
+	min-height: 100px;
+}
+
+.navbar-header{
+}
+
+.navbar-inverse{
+	background-color: #337AB7;
+	border-color: #337AB7;
+	border-radius: 0;
+	color: white;
+}
+
+.navbar-collapse.collapse{
+	display: initial!important;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+	color: white;	
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover{
+	background-color: rgba(8, 8, 8, 0);
+}
+.navbar-inverse .navbar-nav>li>a:focus, .navbar-inverse .navbar-nav>li>a:hover{
+	background-color: none;
+}
+
+.dropdown-menu>li>a{
+	background-color: #337AB7;
+	color: white;
+}
+
+.dropdown-menu{
+	background-color: #337AB7;
+	border-color: #777;
+}
+
+table>thead>tr>th>a{
+	color: #ed3237;
+}
+
+table>thead>tr>th{
+	color: #ed3237;
+}
+
+table>thead>tr>th>a:hover{
+	color: #ed3237;
+}
+
+.glyphicon-user{
+	color: #ed3237;
+}
+
+.nView{
+	background-color: #d9534f
+}
+
+.ingreso{
+	padding: 50px;
+}
