@@ -1,0 +1,12 @@
+Parking Notifier
+-
+-Usando Git para Windows
+En la linea de comandos gitbash
+1. Clonar el proyecto usando: git clone https://github.com/Garcia96/Parking-Notifier.git
+2. Entrar en la carpeta Parking-Notifier
+3. Instalar las dependencias del framework con composer usando: composer install
+-- si pide permisos en el archivo app.php, aceptarlos
+
+4. Crear una base datos en su gestor de base de datos y hacer la configuración de la conexión en el archivo config/app.php
+5. Ejecutar migraciones usando: bin/cake migrations migrate
+6. Ejecutar seeders usando: bin/cake migrations seed
