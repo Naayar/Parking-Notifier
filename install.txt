@@ -7,6 +7,7 @@ En la linea de comandos gitbash
 3. Instalar las dependencias del framework con composer usando: composer install
 -- si pide permisos en el archivo app.php, aceptarlos
 
-4. Crear una base datos en su gestor de base de datos y hacer la configuración de la conexión en el archivo config/app.php
+4. Crear una base datos en su gestor de base de datos y hacer la configuraciÃ³n de la conexiÃ³n en el archivo config/app.php
 5. Ejecutar migraciones usando: bin/cake migrations migrate
 6. Ejecutar seeders usando: bin/cake migrations seed
+7. ejecutar bin/cake server
