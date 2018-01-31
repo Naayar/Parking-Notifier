@@ -38,7 +38,7 @@ function generaPass(){
 			?>
 		</fieldset>
 		<?= $this->Form->button('Crear',['class' => 'btn btn-danger']) ?>
-		<?php echo $this->Html->link('Cancelar', array('controller' => 'Users', 'action' => 'home'), ['class' => 'btn btn-primary pull-right']); ?>
+		<?php echo $this->Html->link('Cancelar', array('controller' => 'Company', 'action' => 'view'), ['class' => 'btn btn-primary pull-right']); ?>
 		<?= $this->Form->end() ?>
 	</div>
 </div>

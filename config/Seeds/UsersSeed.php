@@ -24,6 +24,7 @@ class UsersSeed extends AbstractSeed
         $data = [
             [
                 'codigo' => '20141578033',
+                'cedula' => '1024570518',
                 'name' => 'Cristian Nicolas',
                 'lastName' => 'Garcia Garcia',
                 'phone' => '',
@@ -39,6 +40,7 @@ class UsersSeed extends AbstractSeed
             ],
             [
                 'codigo' => '20141578091',
+                'cedula' => '1024564654',
                 'name' => 'Brayan Daniel',
                 'lastName' => 'Navarro Ortiz',
                 'phone' => '',
@@ -54,6 +56,7 @@ class UsersSeed extends AbstractSeed
             ],
             [
                 'codigo' => '20141578001',
+                'cedula' => '55164564',
                 'name' => 'Esperaza',
                 'lastName' => 'Garcia Garcia',
                 'phone' => '',
@@ -69,6 +72,7 @@ class UsersSeed extends AbstractSeed
             ],
             [
                 'codigo' => '20141578002',
+                'cedula' => '55666999',
                 'name' => 'Juan',
                 'lastName' => 'Magan',
                 'phone' => '',
@@ -84,6 +88,7 @@ class UsersSeed extends AbstractSeed
             ],
             [
                 'codigo' => '20141578003',
+                'cedula' => '88569365',
                 'name' => 'Yair',
                 'lastName' => 'Lopez',
                 'phone' => '',

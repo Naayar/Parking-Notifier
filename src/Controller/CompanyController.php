@@ -61,7 +61,7 @@ class CompanyController extends AppController
             if ($this->Company->save($company)) {
                 $this->Flash->success(__('La empresa ha sido creada.'));
 
-                return $this->redirect(['controller' => 'sucursal', 'action' => 'add']);
+                return $this->redirect(['controller' => 'sucursal', 'action' => 'add', $company->id]);
             }
             $this->Flash->error(__('La empresa no ha sido creada. Por favor intente nuevamente.'));
         }

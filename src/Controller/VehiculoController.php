@@ -61,6 +61,7 @@ class VehiculoController extends AppController
         if ($this->request->is('post')) {
             $vehiculo = $this->Vehiculo->patchEntity($vehiculo, $this->request->getData());
             $vehiculo->placa = strtoupper($vehiculo->placa);
+            $vehiculo->user_id = $this->Auth->user('id');
             if ($this->Vehiculo->save($vehiculo)) {
                 $this->Flash->success(__('El vehiculo ha sido guardado.'));
 

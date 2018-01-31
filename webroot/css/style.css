@@ -23,15 +23,6 @@ body{
 	padding-top: 5%;
 }
 
-footer{
-  background-color: #777;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 100px;
-  color: white;
-}
-
 .navbar{
 	min-height: 100px;
 }
@@ -93,4 +84,20 @@ table>thead>tr>th>a:hover{
 
 .ingreso{
 	padding: 50px;
+}
+
+footer{
+  background-color: #777;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  vertical-align: middle;
+  color: white;
+}
+
+.foot{
+	position: relative;
+	margin-left: auto;
+  	margin-right: auto;
 }

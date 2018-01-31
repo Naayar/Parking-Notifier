@@ -15,7 +15,10 @@ class CreateUsers extends AbstractMigration
         $table = $this->table('users');
         $table->addColumn('codigo', 'string', [
             'null' => false,
-        ]);
+        ])->addIndex(['codigo'], ['unique' => 'true']);
+        $table->addColumn('cedula', 'string', [
+            'null' => false,
+        ])->addIndex(['cedula'], ['unique' => 'true']);
         $table->addColumn('name', 'string', [
             'default' => null,
             'limit' => 100,
@@ -50,8 +53,8 @@ class CreateUsers extends AbstractMigration
         $table->create();
 
         $refTable = $this->table('users');
-        $refTable->addColumn('company_id', 'integer', array('signed' => 'disable'))->addForeignKey('company_id', 'company','id', array('delete' => 'CASCADE','update' => 'NO_ACTION'))->addIndex(array('codigo'), array('unique' => true));
-        $refTable->addColumn('sucursal_id', 'integer', array('signed' => 'disable'))->addForeignKey('company_id', 'company', 'id', array('delete' => 'CASCADE', 'update' => 'NO_ACTION'));
+        $refTable->addColumn('company_id', 'integer', array('signed' => 'disable'))->addForeignKey('company_id', 'company','id', array('delete' => 'CASCADE','update' => 'NO_ACTION'));
+        $refTable->addColumn('sucursal_id', 'integer', array('signed' => 'disable'))->addForeignKey('sucursal_id', 'sucursal', 'id', array('delete' => 'CASCADE', 'update' => 'NO_ACTION'));
 
         $refTable->update();
     }

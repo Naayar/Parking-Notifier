@@ -197,14 +197,14 @@ class UsersController extends AppController
                     if ($this->request->is('post')) {
                         $user = $this->Auth->identify();
                         if ($user) {
-                            $this->Auth->setUser($user);
                             $email = new Email();
-                            $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
+                            $email->from(['numeroceroseis@hotmail.com' => 'Parking Notifier'])
                                 ->to($user->email)
                                 ->subject('Registro Exitoso')
                                 ->template('newUser')
                                 ->emailFormat('html')
                                 ->send();
+                            $this->Auth->setUser($user);
                             $this->Flash->success(__('El usuario ha sido creado. Por favor agregue su vehiculo'));
                             return $this->redirect(['controller' => 'vehiculo', 'action' => 'firstadd']);
                         }else {
@@ -399,7 +399,7 @@ class UsersController extends AppController
 
     }
 
-    public function recover(){
+    public function recover($token){
 
     }
 }

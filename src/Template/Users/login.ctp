@@ -18,12 +18,14 @@
 			<div class="row">
 				<div class="col-md-6 col-xs-6">
 					<?php echo $this->Form->button('Iniciar Sesión', ['class' => 'btn btn-primary btn-lg btn-block']); ?>
+					<div class="pull-right"><?php echo $this->Html->link("Olvidaste la contraseña?", array('controller' => 'Users', 'action' => '')); ?></div>
 				</div>
 		<?= $this->Form->end() ?> 
 				<div class="col-md-6 col-xs-6">
 					<?=  $this->Html->link('Registrate', array('controller' => 'Users', 'action' => 'add2'), ['class' => 'btn btn-success btn-lg btn-block' ]); ?>
+
 				</div>
 			</div>
-		</fieldset>
+		</fieldset>	
 	</div>
 </div>
