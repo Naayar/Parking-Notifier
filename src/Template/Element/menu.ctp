@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
           </button>
             <?php echo $this->Html->link($this->Html->image("logo.png", ["alt" => "Logo", 'class' => 'media-object img-responsive', 'style' => 'padding-top: 10px' , 'width' => 50]),
-                      ['controller' => 'users', 'action' => 'home'],
+                      ['controller' => 'users', 'action' => 'start'],
                       ['escape' => false, 'title' => 'PARKING NOTIFIER']
                   ). 'PARKING NOTIFIER';
             ?>
@@ -92,6 +92,7 @@
           <?php else: ?>
             <ul class="nav navbar-nav navbar-right">
               <li><?= $this->Html->link('Inicia Sesión', array('controller' => 'Users', 'action' => 'login')); ?></li>
+              <li><?= $this->Html->link('Registrate', array('controller' => 'Users', 'action' => 'add2')); ?></li>
             </ul>
           <?php endif; ?>
         </div><!-- /.navbar-collapse -->

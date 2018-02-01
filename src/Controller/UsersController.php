@@ -46,7 +46,7 @@ class UsersController extends AppController
     */
     public function beforeFilter(\Cake\Event\Event $event){
         parent::beforeFilter($event);
-        $this->Auth->allow(['add2', 'start']);
+        $this->Auth->allow(['add2', 'start','recover', 'resetPassword']);
     }
 
 
@@ -395,11 +395,67 @@ class UsersController extends AppController
     }
 
 
-    public function contra(){
+    public function resetPassword(){
+        $id = $_GET['id'];
+        $token = $_GET['token'];
+        $user = $this->Users->findById($id)->first();
+        debug($user->token);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if (($token != null) && ($user->token != null)) {
+                $pass = $this->request->getData('pass');
+                $pass1 = $this->request->getData('pass1');
+                if($pass == $pass1){
+                    if(strcmp($user->token,$token) === 0){
+                        $user->token=null;
+                        if ($this->Users->save($user)) {
+                            $this->Flash->success(__('La contraseña ha sido actualizada.'));
 
+                            return $this->redirect(['action' => 'login']);
+                        }
+                        $this->Flash->error(__('La nueva contraseña no ha sido guardada. Por favor intente nuevamente.'));
+                    }else{
+                        $this->Flash->error(__('Se ha producido un error al intentar restablecer la contraseña. Por favor asegurese de estar escribiendo correctamente la url.'));
+                        return $this->redirect(['action' => 'login']);
+                    }
+                }else{
+                    $this->Flash->error(__('Las contraseñas no coninciden. Por favor intente nuevamente.'));
+                }
+            }else{
+                $this->Flash->error(__('Ya ha realizado este proceso anteriormente. Por favor inicie sesión.'));
+                return $this->redirect(['action' => 'login']);
+            }
+        }
     }
 
-    public function recover($token){
+    public function recover(){
+        $correo = $this->request->getData('email');
+        $token = $this->request->getData('token');
 
+        if ($this->request->is('post')) {
+            $user = $this->Users->findByEmail($correo)->first();
+            if (!$user) {
+                $this->Flash->error(__('El correo electronico no existe. Por favor intente nuevamente.'));
+            } else {
+                if ($this->request->is(['patch', 'post', 'put'])) {
+                    $user = $this->Users->patchEntity($user, $this->request->getData());
+                    if ($this->Users->save($user)) {
+
+                    $email = new Email();
+                    $email->from(['cngarciag@hotmail.com' => 'Parking Notifier'])
+                        ->to($correo)
+                        ->subject('Solicitud Recuperar Contraseña')
+                        ->template('recover')
+                        ->emailFormat('html')
+                        ->viewVars(['token' => $token, 'user' => $user->id, 'name' => $user->name])
+                        ->send();
+                    
+                    $this->Flash->success(__('Por favor verifique su correo electronico para restablecer la contraseña'));
+                    return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+                    }
+                    $this->Flash->error(__('El correo electronico no pudo ser enviado. Por favor intente nuevamente.'));
+                }
+            }
+        }
     }
 }
