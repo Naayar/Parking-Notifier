@@ -54,7 +54,7 @@ class CreateUsers extends AbstractMigration
 
         $refTable = $this->table('users');
         $refTable->addColumn('company_id', 'integer', array('signed' => 'disable'))->addForeignKey('company_id', 'company','id', array('delete' => 'CASCADE','update' => 'NO_ACTION'));
-        $refTable->addColumn('sucursal_id', 'integer', array('signed' => 'disable'))->addForeignKey('sucursal_id', 'sucursal', 'id', array('delete' => 'CASCADE', 'update' => 'NO_ACTION'));
+        $refTable->addColumn('sucursal_id', 'integer', array('signed' => 'disable', 'null' => true))->addForeignKey('sucursal_id', 'sucursal', 'id', array('delete' => 'CASCADE', 'update' => 'NO_ACTION'));
 
         $refTable->update();
     }

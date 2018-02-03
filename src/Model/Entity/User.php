@@ -43,6 +43,7 @@ class User extends Entity
      */
     protected $_accessible = [
         'codigo' => true,
+        'cedula' => true,
         'name' => true,
         'lastName' => true,
         'phone' => true,

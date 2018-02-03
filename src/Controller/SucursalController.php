@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Sucursal Controller
@@ -13,7 +14,13 @@ use App\Controller\AppController;
 class SucursalController extends AppController
 {
 
-
+    /**
+    *   Autoriza a un usuario no autentificado a acceder a ciertos metodos
+    */
+    public function beforeFilter(\Cake\Event\Event $event){
+        parent::beforeFilter($event);
+        $this->Auth->allow(['firstadd']);
+    }
 
     /**
      * Index method
@@ -114,5 +121,26 @@ class SucursalController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+    *
+    *
+    */
+    public function firstadd($id){
+        $user = TableRegistry::get('Users');
+        $sucursal = $this->Sucursal->find('all')->where(['company_id' => $this->Auth->user('company_id'),'id !=' => 1]);
+        if($this->request->is(['post'])){
+            $sucursal_id = $this->request->getData('id');
+
+            $user->query()->update()
+            ->set(['sucursal_id' => $sucursal_id])
+            ->where(['id' => $this->Auth->user('id')])
+            ->execute();
+
+            $this->Flash->success(__('Oficina seleccionada. Por favor agrega tu vehiculo'));
+            return $this->redirect(['controller' => 'Vehiculo', 'action' => 'firstadd']);
+        }
+        $this->set(compact('sucursal'));
     }
 }

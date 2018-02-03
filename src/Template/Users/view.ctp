@@ -31,7 +31,6 @@
 		  <li class="list-group-item"><p class="text-danger">Rol:</p><?= ' '.$user->role ?></li>
 		  <li class="list-group-item"><p class="text-danger">Acctivo: </p><?= $user->active ? 'Si' : 'No' ?></li>
 		  <li class="list-group-item"><p class="text-danger">Empresa:</p><?= ' '.$user->company->name ?></li>
-		  <li class="list-group-item"><p class="text-danger">asdasd</p> Vestibulum at eros</li>
 		</ul>
 	<div class="pull-right">
 		<?= $this->Html->link(__('Editar'), array('controller' => 'Users', 'action' => 'edit', $user->id), ['class' => 'btn btn-primary']); ?>

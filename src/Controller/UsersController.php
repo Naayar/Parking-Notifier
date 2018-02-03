@@ -55,14 +55,19 @@ class UsersController extends AppController
     */
     public function login()
     {
+        $u = $this->Users->findByEmail($this->request->getData('email'))->first();
         if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
-            }else {
-                echo $this->Flash->error('Datos invalidos',['Key' => 'auth']);
-            } 
+            if($u->token == null){
+                $user = $this->Auth->identify();
+                if ($user) {
+                    $this->Auth->setUser($user);
+                    return $this->redirect($this->Auth->redirectUrl());
+                }else {
+                    echo $this->Flash->error('Datos invalidos',['Key' => 'auth']);
+                } 
+            }else{
+                echo $this->Flash->error('Actualmente te encuentras en el proceso de restablecer tu contraseña. Por favor verifica tu correo ');
+            }
         }
     }
 
@@ -169,7 +174,7 @@ class UsersController extends AppController
 
 
     /**
-    * Metodo para crear unn nuevo usuario de tipo user - rol = null
+    * Metodo para crear un nuevo usuario de tipo user - rol = null
     */
     public function add2()
     {
@@ -185,6 +190,7 @@ class UsersController extends AppController
                 $user = $this->Users->patchEntity($user, $this->request->getData());
                 $user->role = 'user';
                 $user->active = 1;
+                $user->sucursal_id =1 ;
                 $user->company_id = $clave->company_id;
                 if ($this->Users->save($user)) {
 
@@ -204,9 +210,10 @@ class UsersController extends AppController
                                 ->template('newUser')
                                 ->emailFormat('html')
                                 ->send();
+
                             $this->Auth->setUser($user);
-                            $this->Flash->success(__('El usuario ha sido creado. Por favor agregue su vehiculo'));
-                            return $this->redirect(['controller' => 'vehiculo', 'action' => 'firstadd']);
+                            $this->Flash->success(__('El usuario ha sido creado. Por favor selecciona tu oficina'));
+                            return $this->redirect(['controller' => 'Sucursal', 'action' => 'firstadd', $$user->company_id]);
                         }else {
                             echo $this->Flash->error('No se ha podido iniciar sesion');
                         } 
@@ -394,12 +401,13 @@ class UsersController extends AppController
 
     }
 
-
+    /**
+    * Metodo para cambiar la contraseña en caso de olvidarla - rol = all
+    */
     public function resetPassword(){
         $id = $_GET['id'];
         $token = $_GET['token'];
         $user = $this->Users->findById($id)->first();
-        debug($user->token);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if (($token != null) && ($user->token != null)) {
@@ -428,6 +436,9 @@ class UsersController extends AppController
         }
     }
 
+    /**
+    * Metodo para enviar correo electronico para restablecer la contraseña- rol = all
+    */
     public function recover(){
         $correo = $this->request->getData('email');
         $token = $this->request->getData('token');

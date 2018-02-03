@@ -8,10 +8,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-            <?php echo $this->Html->link($this->Html->image("logo.png", ["alt" => "Logo", 'class' => 'media-object img-responsive', 'style' => 'padding-top: 10px' , 'width' => 50]),
+            <?php echo $this->Html->link($this->Html->image("logo.png", ["alt" => "Logo", 'class' => 'media-object img-responsive', 'style' => 'display: inline-block; vertical-align: middle; line-height:normal; padding-top: 10%;' , 'width' => 50]),
                       ['controller' => 'users', 'action' => 'start'],
                       ['escape' => false, 'title' => 'PARKING NOTIFIER']
-                  ). 'PARKING NOTIFIER';
+                  ). ' PARKING NOTIFIER';
             ?>
         </div>
 

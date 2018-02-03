@@ -29,6 +29,7 @@ function generaPass(){
 		<fieldset>
 			<?php 
 				echo $this->Form->input('codigo', ['label' => 'Codigo']);
+				echo $this->Form->input('cedula', ['label' => 'Identificación']);
 				echo $this->Form->input('name', ['label' => 'Nombres']);
 				echo $this->Form->input('lastName', ['label' => 'Apellidos']);
 				echo $this->Form->input('phone', ['label' => 'Celular']);

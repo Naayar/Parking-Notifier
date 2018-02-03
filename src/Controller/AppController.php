@@ -58,7 +58,6 @@ class AppController extends Controller
                 'controller' => 'Users', 
                 'action' => 'login'
             ],
-            'authError' => 'Error al cargar', 
             'loginRedirect' => ['controller' => 'Users', 'action' => 'home'],
             'logoutRedirect' => ['controller' => 'Users', 'action' => 'start'],
             'unauthorizedRedirect' => $this->referer() 

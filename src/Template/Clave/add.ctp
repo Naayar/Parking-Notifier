@@ -4,7 +4,7 @@ function generaPass(){
     $longitudCadena=strlen($cadena);
      
     $pass = "";
-    $longitudPass=15;
+    $longitudPass=8;
      
     //Creamos la contraseña
     for($i=1 ; $i<=$longitudPass ; $i++){

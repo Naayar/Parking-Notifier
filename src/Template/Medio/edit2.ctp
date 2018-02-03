@@ -1,34 +1,29 @@
 <title>
-	Parking Notifier - SA - Editar Medio
+	Parking Notifier - Medios de Notificación
 </title>
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3">
 		<div class="page-header">
-			<h2>Editar medio</h2>
+			<h2>Medios de Notificación</h2>
 		</div>
-		<p>Se han preseleccionado los medios actualmente activos</p>
-		<div class="btn-group" data-toggle="buttons">
-		<?php foreach ($medio as $me): ?>
-			<label class="btn btn-default btn-lg">
-			    <input type="checkbox" autocomplete="off" checked><?php echo $me->nombre ?>
-			</label>
-		<?php endforeach ?>
+		<h4>Por favor selecciona el medio por el cual quieres ser notidicado </h4>
+		<div class="row">
+			<?php foreach($medios as $medio): ?>
+				<div class="col-sm-6">
+					<div class="well"">
+						<?php echo $this->Form->create(); ?>
+						<?php echo $this->Form->hidden('id', ['value' => $medio->id]); ?>
+						<?php echo $this->Form->button($medio->nombre, ['class' => 'btn btn-default btn-lg btn-block']); ?>
+						<?php echo $this->Form->end(); ?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+			<div class="col-sm-6">
+				<div class="well">
+					<?php echo $this->Html->link('Facebook', ['controller' => '', 'action' => ''], ['class' => 'btn btn-primary btn-lg btn-block']); ?>
+				</div>
+			</div>
 		</div>
 
-
-
-
-
-
-
-		<?= $this->Form->create($medio, ['novalidate']) ?>
-		<fieldset>
-			<?php 
-				echo $this->Form->input('nombre', ['label' => 'Nombre']);
-			?>
-		</fieldset>
-		<?= $this->Form->button('Guardar',['class' => 'btn btn-danger']) ?>
-		<?= $this->Html->link('Cancelar', array('controller' => 'Medio', 'action' => 'index'), ['class' => 'btn btn-primary pull-right']); ?>
-		<?= $this->Form->end() ?>
 	</div>
 </div>

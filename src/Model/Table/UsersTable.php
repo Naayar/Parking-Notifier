@@ -82,12 +82,20 @@ class UsersTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
+            ->scalar('cedula')
+            ->requirePresence('name', 'create')
+            ->allowEmpty('cedula', 'create')
+            ->notEmpty('cedula', 'Escribe tu número de identificación')
+            ->notBlank('cedula', 'El valor del campo no puede ir en blanco')
+            ->alphaNumeric('codigo', 'No puede contener simbolos');
+
+        $validator
             ->scalar('codigo')
             ->requirePresence('codigo', 'create')
             ->notEmpty('codigo', 'Escribe tu código')
             ->notBlank('codigo', 'El valor del campo no puede ir en blanco')
-            ->alphaNumeric('placa', 'No puede contener simbolos')
-            ->add('codigo', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Esta en uso']);
+            ->alphaNumeric('codigo', 'No puede contener simbolos')
+            ->add('codigo', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Este codigo ya se encuentra en uso']);
 
         $validator
             ->scalar('name')
@@ -109,7 +117,7 @@ class UsersTable extends Table
             ->email('email')
             ->requirePresence('email', 'create')
             ->add('email', 'valid', ['rule' => 'email', 'message' => 'Escribe un correo valido'])
-            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Esta en uso'])
+            ->add('email', 'unique', ['rule' => 'validateUnique', 'provider' => 'table', 'message' => 'Este correo ya se encuentra en uso'])
             ->notEmpty('email', 'Escribe tu correo electrónico');
 
         $validator

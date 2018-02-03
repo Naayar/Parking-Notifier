@@ -3,7 +3,6 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
-
 /**
  * Medio Controller
  *
@@ -33,10 +32,11 @@ class MedioController extends AppController
      */
     public function index()
     {
-        $a = TableRegistry::get('users');
-        $medio = $a->find('all')->contain(['medio'])->where(['id' => $this->Auth->user('id')]);
-
-        $this->set('medio', $medio);
+        $medios = $this->Medio->find();
+        $medios->matching('Users', function($q){
+            return $q->where(['UsersMedio.active' => 1]);
+        });
+        $this->set('medios', $medios);
     }
     
     /**
@@ -70,7 +70,7 @@ class MedioController extends AppController
     }
 
     /**
-     * Add method
+     * Metodo mediante el cual el sa añade nuevos medios
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
@@ -110,7 +110,7 @@ class MedioController extends AppController
 
                 return $this->redirect(['action' => 'lista']);
             }
-            $this->Flash->error(__('El medio no ha podido ser guardado.Por favor, intente nuevamente.'));
+            $this->Flash->error(__('El medio no ha podido ser guardado. Por favor, intente nuevamente.'));
         }
         $this->set(compact('medio'));
         $this->set('_serialize', ['medio']);
@@ -123,23 +123,45 @@ class MedioController extends AppController
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function edit2($id = null)
+    public function edit2($id)
     {
+        $medios = $this->Medio->find('all')->where(['id !=' => 2]);
+        if ($this->request->is('post')) {
+            $idmedio = $this->request->getData('id');
+            $medio = $this->Medio->get($idmedio);
+            $user = TableRegistry::get('Users')->get($id);
 
-        $a = TableRegistry::get('users');
-        $medios = $a->find('all')->contain(['medio'])->where(['id' => $id]);
-        $medio = $this->Medio->find('all');
+            $user_medio = TableRegistry::get('users_medio');
+            $usermedio = TableRegistry::get('users_medio')->find()->where(['medio_id' => $medio->id, 'user_id' => $user->id])->first();
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $medio = $this->Medio->patchEntity($medio, $this->request->getData());
-            if ($this->Medio->save($medio)) {
-                $this->Flash->success(__('El medio ha sido guardado.'));
-
-                return $this->redirect(['action' => 'index']);
+            if($usermedio){
+                if($usermedio->active == 0){
+                    $user_medio->query()->update()
+                    ->set(['active' => 1])
+                    ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+                    ->execute();
+                    $this->Flash->success(__('El medio ha sido seleccionado satisfactoriamente.'));
+                    return $this->redirect(['controller' => 'users', 'action' => 'home']);
+                }else{
+                    $user_medio->query()->update()
+                    ->set(['active' => 0])
+                    ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+                    ->execute();
+                    $this->Flash->success(__('El medio ha sido desactivado satisfactoriamente.'));
+                    return $this->redirect(['controller' => 'users', 'action' => 'home']);
+                }
+            }else{
+                $this->Medio->Users->link($medio, [$user]);
+                $user_medio->query()->update()
+                    ->set(['active' => 1])
+                    ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+                    ->execute();
+                $this->Flash->success(__('El medio ha sido seleccionado satisfactoriamente.'));
+                return $this->redirect(['controller' => 'users', 'action' => 'home']);
             }
-            $this->Flash->error(__('El medio no ha podido ser guardado.Por favor, intente nuevamente.'));
+
+            
         }
-        $this->set(compact('medio'));
         $this->set(compact('medios'));
     }
 

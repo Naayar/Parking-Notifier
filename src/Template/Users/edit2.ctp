@@ -14,6 +14,7 @@
 				echo $this->Form->input('lastName', ['label' => 'Apellidos']);
 				echo $this->Form->input('phone', ['label' => 'Celular']);
 				echo $this->Form->input('email', ['label' => 'Correo electrónico']);
+				echo $this->Form->input('password', ['label' => 'Contraseña', 'value' => '', 'placeholder' => 'Dejar en blanco si no deseas editar']);
 			?>
 		</fieldset>
 		<?= $this->Form->button('Guardar', ['class' =>  'btn btn-danger pull-right']) ?>
