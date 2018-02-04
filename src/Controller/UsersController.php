@@ -57,7 +57,6 @@ class UsersController extends AppController
     {
         $u = $this->Users->findByEmail($this->request->getData('email'))->first();
         if ($this->request->is('post')) {
-            if($u->token == null){
                 $user = $this->Auth->identify();
                 if ($user) {
                     $this->Auth->setUser($user);
@@ -65,9 +64,6 @@ class UsersController extends AppController
                 }else {
                     echo $this->Flash->error('Datos invalidos',['Key' => 'auth']);
                 } 
-            }else{
-                echo $this->Flash->error('Actualmente te encuentras en el proceso de restablecer tu contraseña. Por favor verifica tu correo ');
-            }
         }
     }
 
