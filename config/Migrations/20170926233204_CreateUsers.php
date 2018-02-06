@@ -41,10 +41,6 @@ class CreateUsers extends AbstractMigration
         ]);
         $table->addColumn('password', 'string');
         $table->addColumn('role', 'enum', array('values' => 'admin, sa, user, staff'));
-        $table->addColumn('token','string', [
-            'limit' => 100,
-            'null'=> true,
-        ]);
         $table->addColumn('active', 'boolean', [
             'default' => 1,
         ]);

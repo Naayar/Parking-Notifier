@@ -30,7 +30,7 @@ function generaPass(){
 			<h4 >Se enviara un correo electronico con la información para recuperar tu contraseña</h4>
 			<?php echo $this->Form->input('email', $options = array('class' => 'form-control input-lg', 'name' => 'email' ,'placeholder' => 'example@example.com', 'label' => false, 'required')); ?>
 
-			<?php echo $this->Form->hidden('token', ['value' => generaPass()]); ?>
+			<?php echo $this->Form->hidden('value', ['value' => generaPass()]); ?>
 		</div>
 			<?=  $this->Form->button('Enviar', ['class' => 'btn btn-danger btn-lg 	pull-right' ]); ?>
 		<?= $this->Form->end() ?> 	

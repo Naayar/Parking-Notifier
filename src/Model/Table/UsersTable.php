@@ -62,6 +62,9 @@ class UsersTable extends Table
         $this->hasMany('Vehiculo', [
             'foreignKey' => 'user_id'
         ]);
+        $this->hasMany('Token', [
+            'foreignKey' => 'user_id'
+        ]);
         $this->belongsToMany('Medio', [
             'foreignKey' => 'user_id',
             'targetForeignKey' => 'medio_id',
@@ -130,10 +133,6 @@ class UsersTable extends Table
             ->scalar('role')
             ->requirePresence('role', 'create')
             ->notEmpty('role');
-
-        $validator
-            ->scalar('token')
-            ->allowEmpty('token');
 
         $validator
             ->boolean('active')

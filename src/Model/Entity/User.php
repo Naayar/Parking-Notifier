@@ -50,7 +50,6 @@ class User extends Entity
         'email' => true,
         'password' => true,
         'role' => true,
-        'token' => true,
         'active' => true,
         'created' => true,
         'modified' => true,
@@ -60,7 +59,8 @@ class User extends Entity
         'sucursal' => true,
         'ingreso' => true,
         'vehiculo' => true,
-        'medio' => true
+        'medio' => true,
+        'token' => true
     ];
 
     /**
@@ -69,8 +69,7 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password',
-        'token'
+        'password'
     ];
 
     protected function _setPassword($value){
