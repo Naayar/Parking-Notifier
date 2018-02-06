@@ -13,6 +13,30 @@ class IngresoController extends AppController
 {
 
     /**
+    * Autoriza a los usuarios de tipo user y staff solo a ciertos metodos
+    */
+    public function isAuthorized($user){
+        if(isset($user['role']) && $user['role'] === 'user'){
+            if(in_array($this->request->action, ['view', 'index'])){
+                return true;
+            }
+        }
+        if(isset($user['role']) && $user['role'] === 'staff'){
+            if(in_array($this->request->action, ['home', 'logout', 'view2', 'edit2'])){
+                return true;
+            }
+        }
+        if(isset($user['role']) && $user['role'] === 'admin'){
+            if(in_array($this->request->action, ['view'])){
+                return true;
+            }
+        }
+
+
+        return parent::isAuthorized($user);
+    }
+
+    /**
      * Index method
      *
      * @return \Cake\Http\Response|void

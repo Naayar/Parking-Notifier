@@ -87,7 +87,7 @@ Router::scope('/users', function (RouteBuilder $routes) {
     $routes->connect('/medio', ['controller' => 'Medio', 'action' => 'index']);
     $routes->connect('/medio/preferencias/*', ['controller' => 'Medio', 'action' => 'edit2']);
     $routes->connect('/ingreso/*', ['controller' => 'Medio', 'action' => 'view']);
-    $routes->connect('/recover', ['controller' => 'Users', 'action' => 'recover']);
+    $routes->connect('/recover', ['controller' => 'Token', 'action' => 'recover']);
     $routes->connect('/resetPassword/*/*', ['controller' => 'Users', 'action' => 'resetPassword']);
 });
 

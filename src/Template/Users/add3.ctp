@@ -26,6 +26,7 @@ function generaPass(){
 			<h2>Nuevo encargado de seguridad</h2>
 		</div>
 		<?= $this->Form->create($user, ['novalidate']) ?>
+		<?php $genera = generaPass(); ?>
 		<fieldset>
 			<?php 
 				echo $this->Form->input('codigo', ['label' => 'Codigo']);
@@ -34,8 +35,8 @@ function generaPass(){
 				echo $this->Form->input('lastName', ['label' => 'Apellidos']);
 				echo $this->Form->input('phone', ['label' => 'Celular']);
 				echo $this->Form->input('email', ['label' => 'Correo electronico']);
-				echo $this->Form->hidden('clave', ['value' => generaPass()]);
-				echo $this->Form->input('password', ['label' => 'Password', 'value' => generaPass()]);
+				echo $this->Form->hidden('clave', ['value' => $genera]);
+				echo $this->Form->input('password', ['label' => 'Password', 'value' => $genera]);
 			?>
 		</fieldset>
 		<?= $this->Form->button('Crear',['class' => 'btn btn-danger']) ?>
