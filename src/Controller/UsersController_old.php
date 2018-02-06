@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
 use Cake\Database\Connection;
@@ -63,6 +62,7 @@ class UsersController extends AppController
                     $this->Auth->setUser($user);
                     return $this->redirect($this->Auth->redirectUrl());
                 }else {
+                    
                     echo $this->Flash->error('Datos invalidos',['Key' => 'auth']);
                 } 
         }
@@ -239,6 +239,7 @@ class UsersController extends AppController
             $user->role = 'staff';
             $user->active = 1;
             $user->company_id = $this->Auth->user('company_id');
+            debug($user->company_id);
             if ($this->Users->save($user)) {
 
                 $email = new Email();
@@ -403,36 +404,66 @@ class UsersController extends AppController
     public function resetPassword(){
         $id = $_GET['id'];
         $token = $_GET['token'];
-        $user = $this->Users->get($id, [
-            'contain' => 'Company'
-        ]);
-        $tabletoken = TableRegistry::get('Token');
-        $tok = $tabletoken->find()->where(['user_id' => $user->id, 'active' => 0])->first();
-
-
+        $user = $this->Users->findById($id)->first();
         if ($this->request->is(['patch', 'post', 'put'])) {
-            if (($token != null) && ($tok->value != null)) {
-                    if(strcmp($tok->value,$token) === 0){
-                        $user = $this->Users->patchEntity($user, $this->request->getData());
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if (($token != null) && ($user->token != null)) {
+                $pass = $this->request->getData('pass');
+                $pass1 = $this->request->getData('pass1');
+                if($pass == $pass1){
+                    if(strcmp($user->token,$token) === 0){
+                        $user->token=null;
                         if ($this->Users->save($user)) {
-                            $query = $tabletoken->query()->update()
-                            ->set(['active' => 1])
-                            ->where(['user_id' => $user->id])
-                            ->execute();
                             $this->Flash->success(__('La contraseña ha sido actualizada.'));
+
                             return $this->redirect(['action' => 'login']);
                         }
-                        $this->Flash->error(__('Los datos de usuario no has sido guardados. Por favor intente nuevamente .'));
+                        $this->Flash->error(__('La nueva contraseña no ha sido guardada. Por favor intente nuevamente.'));
                     }else{
                         $this->Flash->error(__('Se ha producido un error al intentar restablecer la contraseña. Por favor asegurese de estar escribiendo correctamente la url.'));
                         return $this->redirect(['action' => 'login']);
                     }
+                }else{
+                    $this->Flash->error(__('Las contraseñas no coninciden. Por favor intente nuevamente.'));
+                }
             }else{
                 $this->Flash->error(__('Ya ha realizado este proceso anteriormente. Por favor inicie sesión.'));
                 return $this->redirect(['action' => 'login']);
             }
         }
-        $this->set(compact('user'));
     }
 
+    /**
+    * Metodo para enviar correo electronico para restablecer la contraseña- rol = all
+    */
+    public function recover(){
+        $correo = $this->request->getData('email');
+        $token = $this->request->getData('token');
+
+        if ($this->request->is('post')) {
+            $user = $this->Users->findByEmail($correo)->first();
+            if (!$user) {
+                $this->Flash->error(__('El correo electronico no existe. Por favor intente nuevamente.'));
+            } else {
+                if ($this->request->is(['patch', 'post', 'put'])) {
+                    $user = $this->Users->patchEntity($user, $this->request->getData());
+                    if ($this->Users->save($user)) {
+
+                    $email = new Email();
+                    $email->from(['cngarciag@hotmail.com' => 'Parking Notifier'])
+                        ->to($correo)
+                        ->subject('Solicitud Recuperar Contraseña')
+                        ->template('recover')
+                        ->emailFormat('html')
+                        ->viewVars(['token' => $token, 'user' => $user->id, 'name' => $user->name])
+                        ->send();
+                    
+                    $this->Flash->success(__('Por favor verifique su correo electronico para restablecer la contraseña'));
+                    return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+                    }
+                    $this->Flash->error(__('El correo electronico no pudo ser enviado. Por favor intente nuevamente.'));
+                }
+            }
+        }
+    }
 }
