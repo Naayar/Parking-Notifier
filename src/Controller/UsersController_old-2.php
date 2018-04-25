@@ -6,18 +6,6 @@ use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
 use Cake\Database\Connection;
-require_once 'autoload.php';
-use Facebook\FacebookSession;
-use Facebook\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
-use Facebook\FacebookSDKException;
-use Facebook\FacebookRequestException;
-use Facebook\FacebookAuthorizationException;
-use Facebook\GraphObject;
-use Facebook\Entities\AccessToken;
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookHttpable;
 
 /**
  * Users Controller
@@ -28,22 +16,23 @@ use Facebook\HttpClients\FacebookHttpable;
 class UsersController extends AppController
 {
 
+
     /**
     * Autoriza a los usuarios de tipo user y staff solo a ciertos metodos
     */
     public function isAuthorized($user){
         if(isset($user['role']) && $user['role'] === 'user'){
-            if(in_array($this->request->action, ['home', 'logout', 'view2','edit2', 'loginfacebook'])){
+            if(in_array($this->request->action, ['home', 'logout', 'view2','edit2'])){
                 return true;
             }
         }
         if(isset($user['role']) && $user['role'] === 'staff'){
-            if(in_array($this->request->action, ['home', 'logout', 'view2', 'edit2', 'loginfacebook'])){
+            if(in_array($this->request->action, ['home', 'logout', 'view2', 'edit2'])){
                 return true;
             }
         }
         if(isset($user['role']) && $user['role'] === 'admin'){
-            if(in_array($this->request->action, ['home', 'logout', 'add2', 'view2','edit2', 'add3', 'loginfacebook'])){
+            if(in_array($this->request->action, ['home', 'logout', 'add2', 'view2','edit2', 'add3'])){
                 return true;
             }
         }
@@ -78,63 +67,9 @@ class UsersController extends AppController
                 } 
         }
     }
-
-
-
-    public function loginfacebook(){
-
-       FacebookSession::setDefaultApplication( '1746281588966450','030fc1337edb02a87f6b564a8043448a' );
-        // login helper with redirect_uri
-            $helper = new FacebookRedirectLoginHelper("fbconfig.php" );
-        try {
-          $session = $helper->getSessionFromRedirect();
-        } catch( FacebookRequestException $ex ) {
-          // When Facebook returns an error
-        } catch( Exception $ex ) {
-          // When validation fails or other local issues
-        }
-        // see if we have a session
-        if ( isset( $session ) ) {
-          // graph api request for user data
-          $request = new FacebookRequest( $session, 'GET', '/me' );
-          $response = $request->execute();
-          // get response
-          $graphObject = $response->getGraphObject();
-                $fbid = $graphObject->getProperty('id');              // To Get Facebook ID
-                $fbfullname = $graphObject->getProperty('name'); // To Get Facebook full name
-            /* ---- Session Variables -----*/
-                $_SESSION['FBID'] = $fbid;           
-                $_SESSION['FULLNAME'] = $fbfullname;
-            /* ---- header location after session ----*/
-          $this->redirect(['controller' => 'medio', 'action' => 'edit2', $this->Auth->user('id')]);
-        } else {
-          $loginUrl = $helper->getLoginUrl();
-            $this->redirect($loginUrl);
-        }
-
-        $this->autoRender = false;
-    }
-
-
-    public function logoutfacebook(){
-        $_SESSION['FBID'] = NULL;
-        $_SESSION['FULLNAME'] = NULL;
-        $_SESSION['EMAIL'] =  NULL;
-
-        $medio = TableRegistry::get('medio')->get(2);
-        $user = $this->Users->get($this->Auth->user('id'));
-        $user_medio = TableRegistry::get('users_medio');
-        $usermedio = TableRegistry::get('users_medio')->find()->where(['medio_id' => $medio->id, 'user_id' => $user->id])->first();
-
-        if($usermedio){
-            $user_medio->query()->update()
-            ->set(['active' => 0])
-            ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
-            ->execute();
-            $this->Flash->success(__('El medio ha sido desactivado satisfactoriamente.'));
-            return $this->redirect(['controller' => 'medio', 'action' => 'edit2', $user->id]);
-        }
-
+    public function loginfb()
+    {
+        
     }
 
     /**
@@ -153,10 +88,6 @@ class UsersController extends AppController
         $this->set('notify', $notify);
     }
 
-    public function logout()
-    {
-        return $this->redirect($this->Auth->logout());
-    }
 
     /**
      * Index method

@@ -217,3 +217,9 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('BootstrapUI');
+
+Plugin::load('ADmad/HybridAuth', ['bootstrap' => true, 'routes' => true]);
+
+Plugin::loadAll(
+    array('Facebook' => array('bootstrap' => true))
+);

@@ -58,6 +58,7 @@ class AppController extends Controller
                 'controller' => 'Users', 
                 'action' => 'login'
             ],
+
             'loginRedirect' => ['controller' => 'Users', 'action' => 'home'],
             'logoutRedirect' => ['controller' => 'Users', 'action' => 'start'],
             'unauthorizedRedirect' => $this->referer() 
@@ -92,7 +93,9 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         $this->set('current_user', $this->Auth->user());
+        \Cake\Event\EventManager::instance()->on('HybridAuth.newUser', [$this, 'createUser']);
     }
+
 
     public function isAuthorized($user){
 
