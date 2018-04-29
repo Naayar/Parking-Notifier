@@ -89,14 +89,12 @@ Router::scope('/users', function (RouteBuilder $routes) {
     $routes->connect('/ingreso/*', ['controller' => 'Medio', 'action' => 'view']);
     $routes->connect('/recover', ['controller' => 'Token', 'action' => 'recover']);
     $routes->connect('/resetPassword/*/*', ['controller' => 'Users', 'action' => 'resetPassword']);
-    $routes->connect('/loginfacebook', ['controller' => 'Users', 'action' => 'loginfacebook']);
 });
 
 Router::scope('/admin', function (RouteBuilder $routes) {
 
     $routes->connect('/notificaciones', ['controller' => 'Notificacion', 'action' => 'index']);
     $routes->connect('/notificaciones/detalle/*', ['controller' => 'Notificacion', 'action' => 'view']);
-    $routes->connect('/notificaciones/misnotificaciones/*', ['controller' => 'Notificacion', 'action' => 'viewadmin']);
     $routes->connect('/claves', ['controller' => 'Clave', 'action' => 'add']);
     $routes->connect('/nuevostaff', ['controller' => 'Users', 'action' => 'add3']);
 });

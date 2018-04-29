@@ -11,8 +11,7 @@
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "~1.0",
         "josegonzalez/dotenv": "2.*",
-        "friendsofcake/bootstrap-ui": "^1.2",
-        "admad/cakephp-hybridauth": "^4.1"
+        "friendsofcake/bootstrap-ui": "^1.2"
     },
     "require-dev": {
         "psy/psysh": "@stable",
