@@ -217,15 +217,3 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('BootstrapUI');
-<<<<<<< HEAD
-
-Plugin::load('ADmad/HybridAuth', ['bootstrap' => true, 'routes' => true]);
-
-Plugin::loadAll(
-    array('Facebook' => array('bootstrap' => true))
-);
-=======
-Plugin::load('ChartJs', ['bootstrap' => false, 'routes' => false]);
-Plugin::load('CakeJs');
-Plugin::loadAll();
->>>>>>> 3bd11d06a6a3ac61ee9522845eed343812e1c1c5

@@ -100,4 +100,25 @@ footer{
 	position: relative;
 	margin-left: auto;
   	margin-right: auto;
+  	text-align: center;
+}
+
+
+.caja{
+	margin: auto;
+	max-width: 250px;
+	padding: 20px;
+	border: 1px solid #8D8D8D
+}
+
+.caja select{
+	width: 100%;
+	font-size: 16px;
+	padding: 5px;
+}
+
+.resultados{
+	margin: auto;
+	margin-top: 40px;
+	width: 100%;
 }

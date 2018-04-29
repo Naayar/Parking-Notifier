@@ -1,9 +1,30 @@
-<title>
+﻿<title>
 	Parking Notifier - <?= $current_user['role'] ?> - home
 </title>
 
 <?php if (isset($current_user['role']) && $current_user['role'] === 'sa'): ?>
 	
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			<?php 
+			echo $this->Chartjs->createChart([
+			    'Chart' => [
+			        'id' => 'mygrafico',
+			        'type' => 'bar'
+			    ], 
+			    'Data' => $dataChart,
+			    'Options' => [
+			        'Bar' => [
+			            'scaleShowGridLines' => false
+			        ],
+			        'responsive' => true
+			    ]
+			]);
+			 ?>
+		</div>
+	</div>
+	<p>Editado desde la laptop, no lo puedo creer</p>
+
 <?php endif ?>
 
 <?php if (isset($current_user['role']) && $current_user['role'] === 'admin'): ?>
@@ -86,27 +107,6 @@
 		</div>
 	</div>
 	
-<?php endif ?>
-
-<?php if (isset($current_user['role']) && $current_user['role'] === 'staff'): ?>
-	<div class="row">
-		<div class="col-sm-8 col-sm-offset-2">
-			<div class="page-header">
-		  		<h2>Ingreso y Salida</h2>
-		  	</div>
-		  	<div class="panel panel-default">
-		  		<div class="row">
-		  			<div class="col-sm-6 col-sm-offset-3 ">
-		  				<?php echo $this->Form->create($users,['style' => 'margin: 100px']); ?>
-		  				<?php echo $this->Form->input('user_codigo', ['label' => 'Código']); ?>
-		  				<?php echo $this->Form->submit('Enviar', ['class' => 'btn btn-danger pull-right']); ?>
-		  				<?php echo $this->Form->end(); ?>
-		  			</div>
-		  		</div>
-			<a href="" class="pull-right">Invitado</a>
-			</div>
-		</div>
-	</div>
 <?php endif ?>
 
 <?php if (isset($current_user['role']) && $current_user['role'] === 'user'): ?>

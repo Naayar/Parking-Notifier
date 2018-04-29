@@ -11,7 +11,8 @@
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "~1.0",
         "josegonzalez/dotenv": "2.*",
-        "friendsofcake/bootstrap-ui": "^1.2"
+        "friendsofcake/bootstrap-ui": "^1.2",
+        "aws/aws-sdk-php": "^3.55"
     },
     "require-dev": {
         "psy/psysh": "@stable",

@@ -20,6 +20,11 @@ class MedioController extends AppController
                 return true;
             }
         }
+        if(isset($user['role']) && $user['role'] === 'admin'){
+            if(in_array($this->request->action, ['index', 'edit2'])){
+                return true;
+            }
+        }
 
 
         return parent::isAuthorized($user);
@@ -34,9 +39,14 @@ class MedioController extends AppController
     {
         $medios = $this->Medio->find();
         $medios->matching('Users', function($q){
-            return $q->where(['UsersMedio.active' => 1]);
+            return $q->where(['UsersMedio.active' => 1,'Users.id' => $this->Auth->user('id')]);
         });
         $this->set('medios', $medios);
+    }
+
+
+    public function isFacebookLogin(){
+        
     }
     
     /**
@@ -141,14 +151,12 @@ class MedioController extends AppController
                     ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
                     ->execute();
                     $this->Flash->success(__('El medio ha sido seleccionado satisfactoriamente.'));
-                    return $this->redirect(['controller' => 'users', 'action' => 'home']);
                 }else{
                     $user_medio->query()->update()
                     ->set(['active' => 0])
                     ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
                     ->execute();
                     $this->Flash->success(__('El medio ha sido desactivado satisfactoriamente.'));
-                    return $this->redirect(['controller' => 'users', 'action' => 'home']);
                 }
             }else{
                 $this->Medio->Users->link($medio, [$user]);
@@ -157,7 +165,6 @@ class MedioController extends AppController
                     ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
                     ->execute();
                 $this->Flash->success(__('El medio ha sido seleccionado satisfactoriamente.'));
-                return $this->redirect(['controller' => 'users', 'action' => 'home']);
             }
 
             

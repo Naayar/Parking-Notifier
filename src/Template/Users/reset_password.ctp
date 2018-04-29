@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
 		<div class="page-header">
-			<h2>Editar usuario</h2>
+			<h2>Nueva contraseña</h2>
 		</div>
 		<?= $this->Form->create($user, ['novalidate']) ?>
 		<fieldset>
@@ -14,7 +14,7 @@
 				echo $this->Form->hidden('lastName', ['label' => 'Apellidos']);
 				echo $this->Form->hidden('phone', ['label' => 'Celular']);
 				echo $this->Form->hidden('email', ['label' => 'Correo electrónico']);
-				echo $this->Form->input('password', ['label' => 'Contraseña', 'value' => '', 'placeholder' => 'Dejar en blanco si no deseas editar']);
+				echo $this->Form->input('password', ['label' => 'Contraseña', 'value' => '']);
 			?>
 		</fieldset>
 		<?= $this->Form->button('Guardar', ['class' =>  'btn btn-danger pull-right']) ?>

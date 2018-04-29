@@ -27,6 +27,25 @@ use Facebook\HttpClients\FacebookHttpable;
  */
 class UsersController extends AppController
 {
+    public $helpers = [
+        'Chartjs' => [
+            'Chart' => [
+                'type' => 'bar',
+            ],
+            'Canvas' => [
+                'position' => 'relative',
+                'width' => 750,
+                'height' => 300,
+                'css' => ['padding' => '10px'],
+            ],
+            'Options' => [
+                'responsive' => true,
+                'Bar' => [
+                    'scaleShowGridLines' => false 
+                ]
+            ],
+        ]
+    ];
 
     /**
     * Autoriza a los usuarios de tipo user y staff solo a ciertos metodos
@@ -82,10 +101,16 @@ class UsersController extends AppController
 
 
     public function loginfacebook(){
+<<<<<<< HEAD
 
        FacebookSession::setDefaultApplication( '1746281588966450','030fc1337edb02a87f6b564a8043448a' );
         // login helper with redirect_uri
             $helper = new FacebookRedirectLoginHelper("fbconfig.php" );
+=======
+        FacebookSession::setDefaultApplication( '1746281588966450','030fc1337edb02a87f6b564a8043448a' );
+        // login helper with redirect_uri
+            $helper = new FacebookRedirectLoginHelper("localhost/1353/fbconfig.php" );
+>>>>>>> 3bd11d06a6a3ac61ee9522845eed343812e1c1c5
         try {
           $session = $helper->getSessionFromRedirect();
         } catch( FacebookRequestException $ex ) {
@@ -113,6 +138,10 @@ class UsersController extends AppController
         }
 
         $this->autoRender = false;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3bd11d06a6a3ac61ee9522845eed343812e1c1c5
     }
 
 
@@ -142,6 +171,28 @@ class UsersController extends AppController
     */
     public function home()
     {
+
+        $dataChart = [
+            'labels' => ["January", "February", "March", "April", "May", "June", "July"],
+            'datasets' => [
+                    [ 
+                        'label' => "My First dataset",
+                        'fillColor' => "rgba(220,220,220,0.2)",
+                        'strokeColor' => "rgba(220,220,220,1)",
+                        'pointColor' => "rgba(220,220,220,1)",
+                        'pointStrokeColor' => "#fff",
+                        'pointHighlightFill' => "#fff",
+                        'pointHighlightStroke' => "rgba(220,220,220,1)",
+                        'data' => [65, 59, 80, 81, 56, 55, 40]
+                    ]
+            ]
+        ];
+
+
+        if($this->Auth->user('role') == 'staff'){
+            return $this->redirect(['controller' => 'ingreso', 'action' => 'add']);
+        }else{
+
         $users = $this->Users->find('all')->where(['role =' => 'user', 'Company_id' => $this->Auth->user('company_id')])->contain(['Company']);
         $staff = $this->Users->find('all')->where(['role =' => 'staff', 'Company_id' => $this->Auth->user('company_id')])->contain(['Company']);
         $vehiculo = $this->Users->find('all')->where(['id' => $this->Auth->user('id')])->contain(['vehiculo']);
@@ -151,6 +202,13 @@ class UsersController extends AppController
         $this->set('staff', $staff);
         $this->set('vehiculo', $vehiculo);
         $this->set('notify', $notify);
+        $this->set('dataChart', $dataChart);
+        }
+    }
+
+
+    public function ajaxgraficos(){
+
     }
 
     public function logout()
@@ -217,6 +275,7 @@ class UsersController extends AppController
             $user->active = 1;
             $user->sucursal_id = $idsucursal;
             $user->company_id = $idCompany;
+            $cname = $this->Users->Company->find()->where(['Company.id' => $idCompany])->first();
             if ($this->Users->save($user)) {
 
                 $email = new Email();
@@ -225,7 +284,7 @@ class UsersController extends AppController
                     ->subject('Registro Exitoso')
                     ->template('welcome')
                     ->emailFormat('html')
-                    ->viewVars(['value' => $clave])
+                    ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                     ->send();
 
                 $this->Flash->success(__('El usuario ha sido creado.'));
@@ -249,7 +308,6 @@ class UsersController extends AppController
         $c = TableRegistry::get('clave');
         $clave = $c->find()->where(['valor' => $claveinput, 'email' => $emailinput])->first();
         $user = $this->Users->newEntity();
-        $users = $this->Users->Company->find('list')->where(['id !=' => 3])->order(['name' => 'ASC']);
         if ($this->request->is('post')) {
             if(!empty($clave->active) && $clave->active == true){
 
@@ -258,6 +316,7 @@ class UsersController extends AppController
                 $user->active = 1;
                 $user->sucursal_id =1 ;
                 $user->company_id = $clave->company_id;
+                $cname = $this->Users->Company->find()->where(['Company.id' => $user->company_id])->first();
                 if ($this->Users->save($user)) {
 
                     $query = $c->query();
@@ -275,6 +334,7 @@ class UsersController extends AppController
                                 ->subject('Registro Exitoso')
                                 ->template('newUser')
                                 ->emailFormat('html')
+                                ->viewVars(['user' => $user->id, 'name' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                                 ->send();
 
                             $this->Auth->setUser($user);
@@ -292,12 +352,12 @@ class UsersController extends AppController
             $this->Flash->error(__('Clave de empresa no valida. Por favor intente nuevamente o solicite una nueva'));
 
         }
-        $this->set(compact('user', 'users'));
+        $this->set(compact('user'));
 
     }
 
     /**
-    *  Metodo para crear un nuevo administrador - rol = SA
+    *  Metodo para crear un nuevo usuario staff- rol = admin
     */
     public function add3()
     {
@@ -308,15 +368,16 @@ class UsersController extends AppController
             $user->role = 'staff';
             $user->active = 1;
             $user->company_id = $this->Auth->user('company_id');
+            $cname = $this->Users->Company->find()->where(['Company.id' => $this->Auth->user('company_id')])->first();
             if ($this->Users->save($user)) {
 
                 $email = new Email();
                 $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
                     ->to($user->email)
                     ->subject('Registro Exitoso')
-                    ->template('welcome')
+                    ->template('staff')
                     ->emailFormat('html')
-                    ->viewVars(['value' => $clave])
+                    ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                     ->send();
 
                 $this->Flash->success(__('El usuario ha sido creado.'));
@@ -476,7 +537,7 @@ class UsersController extends AppController
             'contain' => 'Company'
         ]);
         $tabletoken = TableRegistry::get('Token');
-        $tok = $tabletoken->find()->where(['user_id' => $user->id, 'active' => 0])->first();
+        $tok = $tabletoken->find()->where(['user_id' => $user->id, 'active' => 0])->last();
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {

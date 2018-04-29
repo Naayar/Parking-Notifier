@@ -17,8 +17,10 @@
 </head>
 <body>
     <?= $this->element('menu') ?>
-    <?= $this->Flash->render() ?>
     <div class="container-fluid">
+        <div class="col-sm-8 col-sm-offset-2">
+            <?= $this->Flash->render() ?>
+        </div>   
             <?= $this->fetch('content') ?>
     </div>
     <?= $this->element('footer') ?>

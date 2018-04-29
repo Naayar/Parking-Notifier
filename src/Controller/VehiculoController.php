@@ -18,6 +18,11 @@ class VehiculoController extends AppController
                 return true;
             }
         }
+        if(isset($user['role']) && $user['role'] === 'admin'){
+            if(in_array($this->request->action, ['index','view', 'add', 'delete','edit'])){
+                return true;
+            }
+        }
         return parent::isAuthorized($user);
     }
 
@@ -42,9 +47,7 @@ class VehiculoController extends AppController
      */
     public function view($id = null)
     {
-        $vehiculo = $this->Vehiculo->get($id, [
-            'contain' => []
-        ]);
+        $vehiculo = $this->Vehiculo->find('all')->contain(['users'])->where(['Vehiculo.user_id' => $id]);
 
         $this->set('vehiculo', $vehiculo);
         $this->set('_serialize', ['vehiculo']);
@@ -65,7 +68,7 @@ class VehiculoController extends AppController
             if ($this->Vehiculo->save($vehiculo)) {
                 $this->Flash->success(__('El vehiculo ha sido guardado.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
             }
             $this->Flash->error(__('El vehiculo no ha podido ser creado. Por favor intente nuevamente.'));
         }
@@ -113,9 +116,9 @@ class VehiculoController extends AppController
             $vehiculo = $this->Vehiculo->patchEntity($vehiculo, $this->request->getData());
             $vehiculo->placa = strtoupper($vehiculo->placa);
             if ($this->Vehiculo->save($vehiculo)) {
-                $this->Flash->success(__('El vehiculo ha sido guardado.'));
+                $this->Flash->success(__('La información del vehiculo ha sido guardado.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
             }
             $this->Flash->error(__('El vehiculo no ha podido ser creado. Por favor intente nuevamente.'));
         }
