@@ -13,6 +13,7 @@ class MedioController extends AppController
 {
     /**
     * Autoriza a los usuarios de tipo user y staff solo a ciertos metodos
+    *bueno probemos esta vaina 
     */
     public function isAuthorized($user){
         if(isset($user['role']) && $user['role'] === 'user'){
