@@ -217,3 +217,6 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('BootstrapUI');
+Plugin::load('ChartJs', ['bootstrap' => false, 'routes' => false]);
+Plugin::load('CakeJs');
+Plugin::loadAll();

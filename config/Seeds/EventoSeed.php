@@ -38,11 +38,6 @@ class EventoSeed extends AbstractSeed
                 'descripcion' => 'Baúl abierto',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s'),
-            ],
-            [
-                'descripcion' => 'Otro',
-                'created' => date('Y-m-d H:i:s'),
-                'modified' => date('Y-m-d H:i:s'),
             ]
 
         ];

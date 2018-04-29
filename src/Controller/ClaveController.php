@@ -70,11 +70,14 @@ class ClaveController extends AppController
             $clave->company_id = $this->Auth->user('company_id');
             if ($this->Clave->save($clave)) {
                 $this->Flash->success(__('La clave ha sido generada.'));
-                $email = new Email('default');
+                $email = new Email();
                 $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
                     ->to($clave->email)
-                    ->subject('About')
-                    ->send('My message '. $clave->valor);
+                    ->subject('Contraseña')
+                    ->template('clave')
+                    ->emailFormat('html')
+                    ->viewVars(['value' => $clave])
+                    ->send();
                 return $this->redirect(['controller' => 'users', 'action' => 'home']);
             }
             $this->Flash->error(__('La clave no ha podido ser generada. Por favor intente nuevamente.'));

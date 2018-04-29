@@ -9,7 +9,6 @@
 		<?= $this->Form->create($user, ['novalidate']) ?>
 		<fieldset>
 			<?php 
-				echo $this->Form->input('codigo', ['label' => 'Código']);
 				echo $this->Form->input('name', ['label' => 'Nombres']);
 				echo $this->Form->input('lastName', ['label' => 'Apellidos']);
 				echo $this->Form->input('phone', ['label' => 'Celular']);

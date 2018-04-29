@@ -14,11 +14,11 @@ class CreateIngreso extends AbstractMigration
     {
         $table = $this->table('ingreso');
         $table->addColumn('entrada', 'datetime', [
-            'null' => false,
+            'null' => true,
         ]);
 
         $table->addColumn('salida', 'datetime', [
-            'null' => false,
+            'null' => true,
         ]);
         $table->addColumn('validador', 'boolean', [
             'default' => 0,

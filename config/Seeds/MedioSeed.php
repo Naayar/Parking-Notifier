@@ -25,7 +25,7 @@ class MedioSeed extends AbstractSeed
                 'modified' => date('Y-m-d H:i:s'),
             ],
             [
-                'nombre' => 'Facebook',
+                'nombre' => 'SMS',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s'),
             ]

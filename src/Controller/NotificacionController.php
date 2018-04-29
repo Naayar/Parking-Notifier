@@ -1,8 +1,17 @@
 <?php
+
 namespace App\Controller;
+
+//require 'vendor/autoload.php';
 
 use App\Controller\AppController;
 use Cake\ORM\TableRegistry;
+use Cake\Database\Connection;
+use Cake\Mailer\Email;
+use Cake\I18n\Time;
+use Cake\I18n\Date;
+
+
 
 /**
  * Notificacion Controller
@@ -28,7 +37,7 @@ class NotificacionController extends AppController
             }
         }
         if(isset($user['role']) && $user['role'] === 'admin'){
-            if(in_array($this->request->action, ['index', 'view'])){
+            if(in_array($this->request->action, ['index', 'view','viewadmin'])){
                 return true;
             }
         }
@@ -94,6 +103,14 @@ class NotificacionController extends AppController
         $this->set('userDestino', $userDestino);
     }
 
+
+    public function viewadmin()
+    {
+        $user = TableRegistry::get('users');
+        $notify = $user->find('all')->where(['id' => $this->Auth->user('id')])->contain(['notificacion']);
+        $this->set('notify', $notify);
+    }
+
     /**
      * Add method
      *
@@ -101,21 +118,129 @@ class NotificacionController extends AppController
      */
     public function add()
     {
-        $eve = TableRegistry::get('evento');
-        $evento = $eve->find('all');
         $notificacion = $this->Notificacion->newEntity();
-        if ($this->request->is('post')) {
-            $notificacion = $this->Notificacion->patchEntity($notificacion, $this->request->getData());
-            if ($this->Notificacion->save($notificacion)) {
-                $this->Flash->success(__('The notificacion has been saved.'));
+        $eventoos = TableRegistry::get('evento')->find('all');
+        $ingresos = TableRegistry::get('ingreso');
+        $now = new Time();
+        $now->timezone = 'America/Bogota';
 
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is('post')) {
+            $placa = $this->request->getData('placa');
+            $descri = $this->request->getData('otro');
+            $vehiculo = TableRegistry::get('vehiculo')->find('all')->where(['vehiculo.placa' => $placa])->contain(['users'])->first();
+            if($vehiculo){
+            $user = TableRegistry::get('users')->get($vehiculo->user_id);
+            $ingreso = $ingresos->find()->where(['user_id' => $user->id, 'validador' => 1, 'day(entrada)' => $now->day, 'month(entrada)' => $now->month, 'year(entrada)' => $now->year, 'sucursal_id' => $this->Auth->user('sucursal_id')])->last();
+            if($ingreso){
+                $medios = TableRegistry::get('medio')->find()->matching('Users', function($q){
+                    return $q;
+                })->where(['UsersMedio.active' => 1,'Users.id' => $vehiculo->user_id]);
+
+                $eventos = array();
+                for ($i=1; $i<=4 ; $i++) { 
+                    if(isset($_POST[$i]) ){
+                        if($_POST[$i] != '0'){
+                            $eventos[] = $i;
+                        }
+
+                    }
+                }
+
+                if($medios){
+
+                foreach ($medios as $m) {
+                    if($m->id == 1){
+
+                        $email = new Email();
+                        $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
+                            ->to($user->email)
+                            ->subject('Alerta vehiculo')
+                            ->template('notificacion')
+                            ->emailFormat('html')
+                            ->viewVars(['eventos' => $eventos, 'otro' => $descri, 'user' => $user->name, 'fecha' => $now, 'placa' => $placa])
+                            ->send();
+
+
+                        $notificacion = $this->Notificacion->patchEntity($notificacion, $this->request->getData());
+                        $notificacion->fecha = $now;
+                        $notificacion->user_id_origen = $this->Auth->user('id');
+                        $notificacion->user_id_destino = $user->id;
+                        if ($this->Notificacion->save($notificacion)) {
+
+                            $evento_notificacion = TableRegistry::get('evento_notificacion');
+
+                            /*foreach ($eventos as $e) {
+                                $evento = TableRegistry::get('evento')->get($eventos[$e]);
+                                $this->Notificacion->Evento->link($notificacion, [$evento]);
+                            }*/
+                            
+                            for ($i=1; $i<=4 ; $i++) { 
+                                if(isset($_POST[$i]) ){
+                                    if($_POST[$i] != '0'){
+                                        $evento = TableRegistry::get('evento')->get($i);
+                                        $this->Notificacion->Evento->link($notificacion, [$evento]);
+                                    }
+
+                                }
+                            }
+
+
+                            $this->Flash->success(__('La notificación al correo ha sido enviada con exito.'));
+                            return $this->redirect(['controller' => 'ingreso','action' => 'add']);
+                        }
+                        $this->Flash->error(__('La notificación al correo no pudo ser enviada. Intente nuevamente'));
+
+                    }else if($m->id == 3){
+                        $sns = \Aws\Sns\SnsClient::factory(array(
+                            'credentials' => [
+                                'key'    => 'AKIAIGSSCIACXX3BBKFA',
+                                'secret' => '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',
+                            ],
+                            'region' => 'us-east-1',
+                            'version'  => 'latest',
+                        ));
+
+                        $result = $sns->publish([
+                            'Message' => 'jelouda es una prueba we toca meterlo en el proy', // REQUIRED
+                            'MessageAttributes' => [
+                                'AWS.SNS.SMS.SenderID' => [
+                                    'DataType' => 'String', // REQUIRED
+                                    'StringValue' => 'nyan'
+                                ],
+                                'AWS.SNS.SMS.SMSType' => [
+                                    'DataType' => 'String', // REQUIRED
+                                    'StringValue' => 'Transactional' // or 'Promotional'
+                                ]
+                            ],
+                            'PhoneNumber' => '573142767316',
+                        ]);
+                        error_log($result);
+                    }
+                }
+            }else{
+                $this->Flash->error(__('El usuario no tiene seleccioando nigún medio de invio, no fue posible enviar la notificación'));
+                return $this->redirect(['action' => 'add']);
             }
-            $this->Flash->error(__('The notificacion could not be saved. Please, try again.'));
+            }else{
+                $this->Flash->error(__('El vehiculo no ha ingresado al parqueadero'));
+                return $this->redirect(['action' => 'add']);
+            }
+            }else{
+                $this->Flash->error(__('El vehiculo no esta registrado en la base de datos'));
+                return $this->redirect(['action' => 'add']);
+            }
+
+
+
+            
         }
         $this->set(compact('notificacion'));
-        $this->set(compact('evento'));
+        $this->set(compact('eventos'));
+        $this->set(compact('eventoos'));
+        $this->set(compact('vehiculo'));
+        $this->set(compact('medios'));
     }
+
 
     /**
      * Edit method

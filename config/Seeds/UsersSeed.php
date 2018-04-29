@@ -36,6 +36,8 @@ class UsersSeed extends AbstractSeed
                 'modified' => date('Y-m-d H:i:s'),
                 'company_id' => 1,
                 'sucursal_id' => 1,
+                'fbid' => '',
+                'fbfullname' => '',
             ],
             [
                 'codigo' => '20141578091',
@@ -51,6 +53,8 @@ class UsersSeed extends AbstractSeed
                 'modified' => date('Y-m-d H:i:s'),
                 'company_id' => 1,
                 'sucursal_id' => 1,
+                'fbid' => '',
+                'fbfullname' => '',
             ],
             [
                 'codigo' => '20141578001',
@@ -66,6 +70,8 @@ class UsersSeed extends AbstractSeed
                 'modified' => date('Y-m-d H:i:s'),
                 'company_id' => 1,
                 'sucursal_id' => 1,
+                'fbid' => '',
+                'fbfullname' => '',
             ],
             [
                 'codigo' => '20141578002',
@@ -81,6 +87,8 @@ class UsersSeed extends AbstractSeed
                 'modified' => date('Y-m-d H:i:s'),
                 'company_id' => 1,
                 'sucursal_id' => 1,
+                'fbid' => '',
+                'fbfullname' => '',
             ],
             [
                 'codigo' => '20141578003',
@@ -96,6 +104,8 @@ class UsersSeed extends AbstractSeed
                 'modified' => date('Y-m-d H:i:s'),
                 'company_id' => 1,
                 'sucursal_id' => 1,
+                'fbid' => '',
+                'fbfullname' => '',
             ]
         ];
 

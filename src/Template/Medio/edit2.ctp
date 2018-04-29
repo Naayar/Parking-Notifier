@@ -6,7 +6,7 @@
 		<div class="page-header">
 			<h2>Medios de Notificación</h2>
 		</div>
-		<h4>Por favor selecciona el medio por el cual quieres ser notidicado </h4>
+		<h4>Por favor selecciona el medio por el cual quieres ser notificado </h4>
 		<div class="row">
 			<?php foreach($medios as $medio): ?>
 				<div class="col-sm-6">
@@ -20,7 +20,11 @@
 			<?php endforeach; ?>
 			<div class="col-sm-6">
 				<div class="well">
-					<?php echo $this->Html->link('Facebook', ['controller' => '', 'action' => ''], ['class' => 'btn btn-primary btn-lg btn-block']); ?>
+					<?php if(isset($_SESSION['FBID']) && ($_SESSION['FBID'] != NULL)): ?>
+					<?php echo $this->Html->link('Logout Facebook', ['controller' => 'Users', 'action' => 'logoutfacebook'], ['class' => 'btn btn-primary btn-lg btn-block']); ?>
+					<?php else: ?>
+					<?php echo $this->Html->link('Login Facebook', ['controller' => 'Users', 'action' => 'loginfacebook'], ['class' => 'btn btn-primary btn-lg btn-block']); ?>
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>

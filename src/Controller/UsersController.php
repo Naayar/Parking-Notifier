@@ -6,6 +6,18 @@ use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
 use Cake\Database\Connection;
+require_once 'autoload.php';
+use Facebook\FacebookSession;
+use Facebook\FacebookRedirectLoginHelper;
+use Facebook\FacebookRequest;
+use Facebook\FacebookResponse;
+use Facebook\FacebookSDKException;
+use Facebook\FacebookRequestException;
+use Facebook\FacebookAuthorizationException;
+use Facebook\GraphObject;
+use Facebook\Entities\AccessToken;
+use Facebook\HttpClients\FacebookCurlHttpClient;
+use Facebook\HttpClients\FacebookHttpable;
 
 /**
  * Users Controller
@@ -15,6 +27,25 @@ use Cake\Database\Connection;
  */
 class UsersController extends AppController
 {
+    public $helpers = [
+        'Chartjs' => [
+            'Chart' => [
+                'type' => 'bar',
+            ],
+            'Canvas' => [
+                'position' => 'relative',
+                'width' => 750,
+                'height' => 300,
+                'css' => ['padding' => '10px'],
+            ],
+            'Options' => [
+                'responsive' => true,
+                'Bar' => [
+                    'scaleShowGridLines' => false 
+                ]
+            ],
+        ]
+    ];
 
 
     /**
@@ -22,17 +53,17 @@ class UsersController extends AppController
     */
     public function isAuthorized($user){
         if(isset($user['role']) && $user['role'] === 'user'){
-            if(in_array($this->request->action, ['home', 'logout', 'view2','edit2'])){
+            if(in_array($this->request->action, ['home', 'logout', 'view2','edit2', 'loginfacebook'])){
                 return true;
             }
         }
         if(isset($user['role']) && $user['role'] === 'staff'){
-            if(in_array($this->request->action, ['home', 'logout', 'view2', 'edit2'])){
+            if(in_array($this->request->action, ['home', 'logout', 'view2', 'edit2', 'loginfacebook'])){
                 return true;
             }
         }
         if(isset($user['role']) && $user['role'] === 'admin'){
-            if(in_array($this->request->action, ['home', 'logout', 'add2', 'view2','edit2', 'add3'])){
+            if(in_array($this->request->action, ['home', 'logout', 'add2', 'view2','edit2', 'add3', 'loginfacebook'])){
                 return true;
             }
         }
@@ -68,11 +99,91 @@ class UsersController extends AppController
         }
     }
 
+
+
+    public function loginfacebook(){
+        FacebookSession::setDefaultApplication( '1746281588966450','030fc1337edb02a87f6b564a8043448a' );
+        // login helper with redirect_uri
+            $helper = new FacebookRedirectLoginHelper("localhost/1353/fbconfig.php" );
+        try {
+          $session = $helper->getSessionFromRedirect();
+        } catch( FacebookRequestException $ex ) {
+          // When Facebook returns an error
+        } catch( Exception $ex ) {
+          // When validation fails or other local issues
+        }
+        // see if we have a session
+        if ( isset( $session ) ) {
+          // graph api request for user data
+          $request = new FacebookRequest( $session, 'GET', '/me' );
+          $response = $request->execute();
+          // get response
+          $graphObject = $response->getGraphObject();
+                $fbid = $graphObject->getProperty('id');              // To Get Facebook ID
+                $fbfullname = $graphObject->getProperty('name'); // To Get Facebook full name
+            /* ---- Session Variables -----*/
+                $_SESSION['FBID'] = $fbid;           
+                $_SESSION['FULLNAME'] = $fbfullname;
+            /* ---- header location after session ----*/
+          $this->redirect(['controller' => 'medio', 'action' => 'edit2', $this->Auth->user('id')]);
+        } else {
+          $loginUrl = $helper->getLoginUrl();
+            $this->redirect($loginUrl);
+        }
+
+        $this->autoRender = false;
+
+    }
+
+
+    public function logoutfacebook(){
+        $_SESSION['FBID'] = NULL;
+        $_SESSION['FULLNAME'] = NULL;
+        $_SESSION['EMAIL'] =  NULL;
+
+        $medio = TableRegistry::get('medio')->get(2);
+        $user = $this->Users->get($this->Auth->user('id'));
+        $user_medio = TableRegistry::get('users_medio');
+        $usermedio = TableRegistry::get('users_medio')->find()->where(['medio_id' => $medio->id, 'user_id' => $user->id])->first();
+
+        if($usermedio){
+            $user_medio->query()->update()
+            ->set(['active' => 0])
+            ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+            ->execute();
+            $this->Flash->success(__('El medio ha sido desactivado satisfactoriamente.'));
+            return $this->redirect(['controller' => 'medio', 'action' => 'edit2', $user->id]);
+        }
+
+    }
+
     /**
     * metodo principal de un usuario autentificado
     */
     public function home()
     {
+
+        $dataChart = [
+            'labels' => ["January", "February", "March", "April", "May", "June", "July"],
+            'datasets' => [
+                    [ 
+                        'label' => "My First dataset",
+                        'fillColor' => "rgba(220,220,220,0.2)",
+                        'strokeColor' => "rgba(220,220,220,1)",
+                        'pointColor' => "rgba(220,220,220,1)",
+                        'pointStrokeColor' => "#fff",
+                        'pointHighlightFill' => "#fff",
+                        'pointHighlightStroke' => "rgba(220,220,220,1)",
+                        'data' => [65, 59, 80, 81, 56, 55, 40]
+                    ]
+            ]
+        ];
+
+
+        if($this->Auth->user('role') == 'staff'){
+            return $this->redirect(['controller' => 'ingreso', 'action' => 'add']);
+        }else{
+
         $users = $this->Users->find('all')->where(['role =' => 'user', 'Company_id' => $this->Auth->user('company_id')])->contain(['Company']);
         $staff = $this->Users->find('all')->where(['role =' => 'staff', 'Company_id' => $this->Auth->user('company_id')])->contain(['Company']);
         $vehiculo = $this->Users->find('all')->where(['id' => $this->Auth->user('id')])->contain(['vehiculo']);
@@ -82,6 +193,13 @@ class UsersController extends AppController
         $this->set('staff', $staff);
         $this->set('vehiculo', $vehiculo);
         $this->set('notify', $notify);
+        $this->set('dataChart', $dataChart);
+        }
+    }
+
+
+    public function ajaxgraficos(){
+
     }
 
     public function logout()
@@ -148,6 +266,7 @@ class UsersController extends AppController
             $user->active = 1;
             $user->sucursal_id = $idsucursal;
             $user->company_id = $idCompany;
+            $cname = $this->Users->Company->find()->where(['Company.id' => $idCompany])->first();
             if ($this->Users->save($user)) {
 
                 $email = new Email();
@@ -156,7 +275,7 @@ class UsersController extends AppController
                     ->subject('Registro Exitoso')
                     ->template('welcome')
                     ->emailFormat('html')
-                    ->viewVars(['value' => $clave])
+                    ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                     ->send();
 
                 $this->Flash->success(__('El usuario ha sido creado.'));
@@ -180,7 +299,6 @@ class UsersController extends AppController
         $c = TableRegistry::get('clave');
         $clave = $c->find()->where(['valor' => $claveinput, 'email' => $emailinput])->first();
         $user = $this->Users->newEntity();
-        $users = $this->Users->Company->find('list')->where(['id !=' => 3])->order(['name' => 'ASC']);
         if ($this->request->is('post')) {
             if(!empty($clave->active) && $clave->active == true){
 
@@ -189,6 +307,7 @@ class UsersController extends AppController
                 $user->active = 1;
                 $user->sucursal_id =1 ;
                 $user->company_id = $clave->company_id;
+                $cname = $this->Users->Company->find()->where(['Company.id' => $user->company_id])->first();
                 if ($this->Users->save($user)) {
 
                     $query = $c->query();
@@ -206,6 +325,7 @@ class UsersController extends AppController
                                 ->subject('Registro Exitoso')
                                 ->template('newUser')
                                 ->emailFormat('html')
+                                ->viewVars(['user' => $user->id, 'name' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                                 ->send();
 
                             $this->Auth->setUser($user);
@@ -223,12 +343,12 @@ class UsersController extends AppController
             $this->Flash->error(__('Clave de empresa no valida. Por favor intente nuevamente o solicite una nueva'));
 
         }
-        $this->set(compact('user', 'users'));
+        $this->set(compact('user'));
 
     }
 
     /**
-    *  Metodo para crear un nuevo administrador - rol = SA
+    *  Metodo para crear un nuevo usuario staff- rol = admin
     */
     public function add3()
     {
@@ -239,15 +359,16 @@ class UsersController extends AppController
             $user->role = 'staff';
             $user->active = 1;
             $user->company_id = $this->Auth->user('company_id');
+            $cname = $this->Users->Company->find()->where(['Company.id' => $this->Auth->user('company_id')])->first();
             if ($this->Users->save($user)) {
 
                 $email = new Email();
                 $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
                     ->to($user->email)
                     ->subject('Registro Exitoso')
-                    ->template('welcome')
+                    ->template('staff')
                     ->emailFormat('html')
-                    ->viewVars(['value' => $clave])
+                    ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                     ->send();
 
                 $this->Flash->success(__('El usuario ha sido creado.'));
@@ -407,7 +528,7 @@ class UsersController extends AppController
             'contain' => 'Company'
         ]);
         $tabletoken = TableRegistry::get('Token');
-        $tok = $tabletoken->find()->where(['user_id' => $user->id, 'active' => 0])->first();
+        $tok = $tabletoken->find()->where(['user_id' => $user->id, 'active' => 0])->last();
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {
