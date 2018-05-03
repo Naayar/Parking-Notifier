@@ -148,50 +148,20 @@ class NotificacionController extends AppController
 
                 if($medios){
 
-                foreach ($medios as $m) {
-                    if($m->id == 1){
-
-                        $email = new Email();
-                        $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
-                            ->to($user->email)
-                            ->subject('Alerta vehiculo')
-                            ->template('notificacion')
-                            ->emailFormat('html')
-                            ->viewVars(['eventos' => $eventos, 'otro' => $descri, 'user' => $user->name, 'fecha' => $now, 'placa' => $placa])
-                            ->send();
-
-
-                        $notificacion = $this->Notificacion->patchEntity($notificacion, $this->request->getData());
-                        $notificacion->fecha = $now;
-                        $notificacion->user_id_origen = $this->Auth->user('id');
-                        $notificacion->user_id_destino = $user->id;
-                        if ($this->Notificacion->save($notificacion)) {
-
-                            $evento_notificacion = TableRegistry::get('evento_notificacion');
-
-                            /*foreach ($eventos as $e) {
-                                $evento = TableRegistry::get('evento')->get($eventos[$e]);
-                                $this->Notificacion->Evento->link($notificacion, [$evento]);
-                            }*/
-                            
-                            for ($i=1; $i<=4 ; $i++) { 
-                                if(isset($_POST[$i]) ){
-                                    if($_POST[$i] != '0'){
-                                        $evento = TableRegistry::get('evento')->get($i);
-                                        $this->Notificacion->Evento->link($notificacion, [$evento]);
-                                    }
-
-                                }
-                            }
-
-
+                    foreach ($medios as $m) {
+                        if($m->id == 1){
+                            $email = new Email();
+                            $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
+                                ->to($user->email)
+                                ->subject('Alerta vehiculo')
+                                ->template('notificacion')
+                                ->emailFormat('html')
+                                ->viewVars(['eventos' => $eventos, 'otro' => $descri, 'user' => $user->name, 'fecha' => $now, 'placa' => $placa])
+                                ->send();
                             $this->Flash->success(__('La notificación al correo ha sido enviada con exito.'));
-                            return $this->redirect(['controller' => 'ingreso','action' => 'add']);
-                        }
-                        $this->Flash->error(__('La notificación al correo no pudo ser enviada. Intente nuevamente'));
 
-                    }else if($m->id == 3){
-                        $sns = \Aws\Sns\SnsClient::factory(array(
+                        }else if($m->id == 3){
+                             $sns = \Aws\Sns\SnsClient::factory(array(
                             'credentials' => [
                                 'key'    => 'AKIAIGSSCIACXX3BBKFA',
                                 'secret' => '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',
@@ -199,9 +169,10 @@ class NotificacionController extends AppController
                             'region' => 'us-east-1',
                             'version'  => 'latest',
                         ));
-
+                        $nmsm=explode(" ", $user->name);
                         $result = $sns->publish([
-                            'Message' => 'jelouda es una prueba we toca meterlo en el proy', // REQUIRED
+                            'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse al parqueadero Gracias
+                            ', // REQUIRED
                             'MessageAttributes' => [
                                 'AWS.SNS.SMS.SenderID' => [
                                     'DataType' => 'String', // REQUIRED
@@ -212,15 +183,39 @@ class NotificacionController extends AppController
                                     'StringValue' => 'Transactional' // or 'Promotional'
                                 ]
                             ],
-                            'PhoneNumber' => '573142767316',
+                            'PhoneNumber' => '57'.$user->phone,
                         ]);
                         error_log($result);
+                        $this->Flash->success(__('La notificación via mensaje de texto (SMS) ha sido enviada.'));
+
+                        }
                     }
+                    $notificacion = $this->Notificacion->patchEntity($notificacion, $this->request->getData());
+                    $notificacion->fecha = $now;
+                    $notificacion->user_id_origen = $this->Auth->user('id');
+                    $notificacion->user_id_destino = $user->id;
+                    if ($this->Notificacion->save($notificacion)) {
+
+                        $evento_notificacion = TableRegistry::get('evento_notificacion');
+
+                        for ($i=1; $i<=4 ; $i++) { 
+                            if(isset($_POST[$i]) ){
+                                if($_POST[$i] != '0'){
+                                    $evento = TableRegistry::get('evento')->get($i);
+                                    $this->Notificacion->Evento->link($notificacion, [$evento]);
+                                }
+
+                            }
+                        }
+                        
+                        return $this->redirect(['controller' => 'ingreso','action' => 'add']);
+                    }
+                    $this->Flash->error(__('La notificación al correo no pudo ser enviada. Intente nuevamente'));
+
+                }else{
+                    $this->Flash->error(__('El usuario no tiene seleccioando nigún medio de envio, no fue posible enviar la notificación'));
+                    return $this->redirect(['action' => 'add']);
                 }
-            }else{
-                $this->Flash->error(__('El usuario no tiene seleccioando nigún medio de invio, no fue posible enviar la notificación'));
-                return $this->redirect(['action' => 'add']);
-            }
             }else{
                 $this->Flash->error(__('El vehiculo no ha ingresado al parqueadero'));
                 return $this->redirect(['action' => 'add']);

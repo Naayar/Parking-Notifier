@@ -107,7 +107,9 @@ Router::scope('/admin', function (RouteBuilder $routes) {
 Router::scope('/staff', function (RouteBuilder $routes) {
     $routes->connect('/ingresoysalida', ['controller' => 'ingreso', 'action' => 'add']);    
     $routes->connect('/notificaciones/nuevo', ['controller' => 'Notificacion', 'action' => 'add']);
+    $routes->connect('/registros', ['controller' => 'Notificacion', 'action' => 'index']);
 });
+
 /**
  * Load all plugin routes. See the Plugin documentation on
  * how to customize the loading of plugin routes.

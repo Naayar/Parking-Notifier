@@ -21,7 +21,12 @@ class VehiculoController extends AppController
         if(isset($user['role']) && $user['role'] === 'admin'){
             if(in_array($this->request->action, ['index','view', 'add', 'delete','edit'])){
                 return true;
-            }
+            } 
+        }
+         if(isset($user['role']) && $user['role'] === 'staff'){
+            if(in_array($this->request->action, ['index','view', 'add', 'delete','edit'])){
+                return true;
+            } 
         }
         return parent::isAuthorized($user);
     }

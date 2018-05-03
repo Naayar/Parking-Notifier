@@ -1,23 +1,11 @@
 <?php
 namespace App\Controller;
-
 use App\Controller\AppController;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
 use Cake\Database\Connection;
 require_once 'autoload.php';
-use Facebook\FacebookSession;
-use Facebook\FacebookRedirectLoginHelper;
-use Facebook\FacebookRequest;
-use Facebook\FacebookResponse;
-use Facebook\FacebookSDKException;
-use Facebook\FacebookRequestException;
-use Facebook\FacebookAuthorizationException;
-use Facebook\GraphObject;
-use Facebook\Entities\AccessToken;
-use Facebook\HttpClients\FacebookCurlHttpClient;
-use Facebook\HttpClients\FacebookHttpable;
 
 /**
  * Users Controller
@@ -46,7 +34,6 @@ class UsersController extends AppController
             ],
         ]
     ];
-
     /**
     * Autoriza a los usuarios de tipo user y staff solo a ciertos metodos
     */
@@ -66,12 +53,8 @@ class UsersController extends AppController
                 return true;
             }
         }
-
-
         return parent::isAuthorized($user);
     }
-
-
     /**
     *   Autoriza a un usuario no autentificado a acceder a ciertos metodos
     */
@@ -79,8 +62,6 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['add2', 'start','recover', 'resetPassword']);
     }
-
-
     /**
     * login
     */
@@ -97,81 +78,11 @@ class UsersController extends AppController
                 } 
         }
     }
-
-
-
-    public function loginfacebook(){
-<<<<<<< HEAD
-
-       FacebookSession::setDefaultApplication( '1746281588966450','030fc1337edb02a87f6b564a8043448a' );
-        // login helper with redirect_uri
-            $helper = new FacebookRedirectLoginHelper("fbconfig.php" );
-=======
-        FacebookSession::setDefaultApplication( '1746281588966450','030fc1337edb02a87f6b564a8043448a' );
-        // login helper with redirect_uri
-            $helper = new FacebookRedirectLoginHelper("localhost/1353/fbconfig.php" );
->>>>>>> 3bd11d06a6a3ac61ee9522845eed343812e1c1c5
-        try {
-          $session = $helper->getSessionFromRedirect();
-        } catch( FacebookRequestException $ex ) {
-          // When Facebook returns an error
-        } catch( Exception $ex ) {
-          // When validation fails or other local issues
-        }
-        // see if we have a session
-        if ( isset( $session ) ) {
-          // graph api request for user data
-          $request = new FacebookRequest( $session, 'GET', '/me' );
-          $response = $request->execute();
-          // get response
-          $graphObject = $response->getGraphObject();
-                $fbid = $graphObject->getProperty('id');              // To Get Facebook ID
-                $fbfullname = $graphObject->getProperty('name'); // To Get Facebook full name
-            /* ---- Session Variables -----*/
-                $_SESSION['FBID'] = $fbid;           
-                $_SESSION['FULLNAME'] = $fbfullname;
-            /* ---- header location after session ----*/
-          $this->redirect(['controller' => 'medio', 'action' => 'edit2', $this->Auth->user('id')]);
-        } else {
-          $loginUrl = $helper->getLoginUrl();
-            $this->redirect($loginUrl);
-        }
-
-        $this->autoRender = false;
-<<<<<<< HEAD
-=======
-
->>>>>>> 3bd11d06a6a3ac61ee9522845eed343812e1c1c5
-    }
-
-
-    public function logoutfacebook(){
-        $_SESSION['FBID'] = NULL;
-        $_SESSION['FULLNAME'] = NULL;
-        $_SESSION['EMAIL'] =  NULL;
-
-        $medio = TableRegistry::get('medio')->get(2);
-        $user = $this->Users->get($this->Auth->user('id'));
-        $user_medio = TableRegistry::get('users_medio');
-        $usermedio = TableRegistry::get('users_medio')->find()->where(['medio_id' => $medio->id, 'user_id' => $user->id])->first();
-
-        if($usermedio){
-            $user_medio->query()->update()
-            ->set(['active' => 0])
-            ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
-            ->execute();
-            $this->Flash->success(__('El medio ha sido desactivado satisfactoriamente.'));
-            return $this->redirect(['controller' => 'medio', 'action' => 'edit2', $user->id]);
-        }
-
-    }
-
     /**
     * metodo principal de un usuario autentificado
     */
     public function home()
     {
-
         $dataChart = [
             'labels' => ["January", "February", "March", "April", "May", "June", "July"],
             'datasets' => [
@@ -187,17 +98,13 @@ class UsersController extends AppController
                     ]
             ]
         ];
-
-
         if($this->Auth->user('role') == 'staff'){
             return $this->redirect(['controller' => 'ingreso', 'action' => 'add']);
         }else{
-
         $users = $this->Users->find('all')->where(['role =' => 'user', 'Company_id' => $this->Auth->user('company_id')])->contain(['Company']);
         $staff = $this->Users->find('all')->where(['role =' => 'staff', 'Company_id' => $this->Auth->user('company_id')])->contain(['Company']);
         $vehiculo = $this->Users->find('all')->where(['id' => $this->Auth->user('id')])->contain(['vehiculo']);
         $notify = $this->Users->find('all')->where(['id' => $this->Auth->user('id')])->contain(['notificacion']);
-
         $this->set('users', $users);
         $this->set('staff', $staff);
         $this->set('vehiculo', $vehiculo);
@@ -205,17 +112,12 @@ class UsersController extends AppController
         $this->set('dataChart', $dataChart);
         }
     }
-
-
     public function ajaxgraficos(){
-
     }
-
     public function logout()
     {
         return $this->redirect($this->Auth->logout());
     }
-
     /**
      * Index method
      *
@@ -231,7 +133,6 @@ class UsersController extends AppController
  
  
     }
-
     /**
      * View method
      *
@@ -246,7 +147,6 @@ class UsersController extends AppController
         $users = $this->Users->find('all')->where(['Users.id' => $user])->contain(['Company']);
         $this->set('users', $users);
     }
-
     /**
      * Add method
      *
@@ -259,8 +159,6 @@ class UsersController extends AppController
         $users = $this->Users->find('all')->where(['Users.id' => $user])->contain(['Company']);
         $this->set('users', $users);
     }
-
-
     /**
     *  Metodo para crear un nuevo administrador - rol = SA
     */
@@ -277,7 +175,6 @@ class UsersController extends AppController
             $user->company_id = $idCompany;
             $cname = $this->Users->Company->find()->where(['Company.id' => $idCompany])->first();
             if ($this->Users->save($user)) {
-
                 $email = new Email();
                 $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
                     ->to($user->email)
@@ -286,9 +183,7 @@ class UsersController extends AppController
                     ->emailFormat('html')
                     ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                     ->send();
-
                 $this->Flash->success(__('El usuario ha sido creado.'));
-
                 return $this->redirect(['controller' => 'Company', 'action' => 'view', $idCompany]);
             }
             $this->Flash->error(__('El usuario no ha podido ser creado. Por favor intente nuevamente.'));
@@ -296,8 +191,6 @@ class UsersController extends AppController
         $this->set(compact('user', 'users'));
         $this->set('_serialize', ['user']);
     }
-
-
     /**
     * Metodo para crear un nuevo usuario de tipo user - rol = null
     */
@@ -310,7 +203,6 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             if(!empty($clave->active) && $clave->active == true){
-
                 $user = $this->Users->patchEntity($user, $this->request->getData());
                 $user->role = 'user';
                 $user->active = 1;
@@ -318,25 +210,22 @@ class UsersController extends AppController
                 $user->company_id = $clave->company_id;
                 $cname = $this->Users->Company->find()->where(['Company.id' => $user->company_id])->first();
                 if ($this->Users->save($user)) {
-
                     $query = $c->query();
                     $query->update()
                         ->set(['active' => 0])
                         ->where(['id' => $clave->id])
                         ->execute();
-
                     if ($this->request->is('post')) {
                         $user = $this->Auth->identify();
                         if ($user) {
                             $email = new Email();
                             $email->from(['numeroceroseis@hotmail.com' => 'Parking Notifier'])
                                 ->to($user->email)
-                                ->subject('Registro Exitoso')
+                                ->subject('Registro Exceptionitoso')
                                 ->template('newUser')
                                 ->emailFormat('html')
                                 ->viewVars(['user' => $user->id, 'name' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                                 ->send();
-
                             $this->Auth->setUser($user);
                             $this->Flash->success(__('El usuario ha sido creado. Por favor selecciona tu oficina'));
                             return $this->redirect(['controller' => 'Sucursal', 'action' => 'firstadd', $$user->company_id]);
@@ -344,18 +233,14 @@ class UsersController extends AppController
                             echo $this->Flash->error('No se ha podido iniciar sesion');
                         } 
                     }
-
                     return $this->redirect(['controller' => 'vehiculo', 'action' => 'firstadd']);
                 }
                 $this->Flash->error(__('El usuario no ha podido ser creado. Por favor intente nuevamente.'));
             }
             $this->Flash->error(__('Clave de empresa no valida. Por favor intente nuevamente o solicite una nueva'));
-
         }
         $this->set(compact('user'));
-
     }
-
     /**
     *  Metodo para crear un nuevo usuario staff- rol = admin
     */
@@ -370,7 +255,6 @@ class UsersController extends AppController
             $user->company_id = $this->Auth->user('company_id');
             $cname = $this->Users->Company->find()->where(['Company.id' => $this->Auth->user('company_id')])->first();
             if ($this->Users->save($user)) {
-
                 $email = new Email();
                 $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
                     ->to($user->email)
@@ -379,16 +263,13 @@ class UsersController extends AppController
                     ->emailFormat('html')
                     ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
                     ->send();
-
                 $this->Flash->success(__('El usuario ha sido creado.'));
-
                 return $this->redirect(['action' => 'home']);
             }
             $this->Flash->error(__('El usuario no ha podido ser creado. Por favor intente nuevamente.'));
         }
         $this->set(compact('user'));
     }
-
     /**
      * Edit method
      *
@@ -407,7 +288,6 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('Los datos han sido guardados.'));
-
                 return $this->redirect(['action' => 'view', $id]);
             }
             $this->Flash->error(__('Los datos de usuario no has sido guardados. Por favor intente nuevamente.'));
@@ -415,8 +295,6 @@ class UsersController extends AppController
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
-
-
     /**
     * Metodo para editar los datos de cualquier usuario - rol = null
     */
@@ -429,7 +307,6 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('Los datos han sido guardados.'));
-
                 return $this->redirect(['action' => 'view2', $id]);
             }
             $this->Flash->error(__('Los datos de usuario no has sido guardados. Por favor intente nuevamente .'));
@@ -437,7 +314,6 @@ class UsersController extends AppController
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
-
     /**
      * Delete method
      * 
@@ -456,7 +332,6 @@ class UsersController extends AppController
             $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('Acción completada con éxito.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Los datos de usuario no han podido ser enviados. Por favor intente nuevamente .'));
@@ -465,7 +340,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
         
     }
-
     /**
     * Metodo para la vista de la raiz del proyecto
     */
@@ -473,8 +347,6 @@ class UsersController extends AppController
     {
         $this->render();
     }
-
-
     /**
     * Metodo para el autocompletado de la busqueda con Ajax
     */
@@ -492,13 +364,10 @@ class UsersController extends AppController
             }
             
             $platillos = $this->Users->find('all', array('recursive' => -1, 'fields' => array('Users.id', 'Users.codigo' ,'Users.name', 'Users.lastName'), 'conditions' => $conditions, 'limit' => 20))->where(['role !=' => 'sa']);
-
         }
         echo json_encode($platillos);
         $this->autoRender = false;
     }
-
-
     /**
     * Metodo para busqueda - rol = SA
     */
@@ -510,23 +379,17 @@ class UsersController extends AppController
             $search = preg_replace('/[^a-zA-ZñÑáéíóúÁÉÍÓÚ0-9 ]/', '', $search);
             $terms = explode(' ', trim($search));
             $terms = array_diff($terms, array(''));
-
             foreach($terms as $term)
             {
                 $terms1[] = preg_replace('/[^a-zA-ZñÑáéíóúÁÉÍÓÚ0-9 ]/', '', $term);
                 $conditions[] = array('CONCAT_WS(Users.name, Users.lastName, Users.codigo) LIKE' => '%' . $term . '%');
             }
-
             $users = $this->Users->find('all', array('recursive' => -1, 'conditions' => $conditions, 'limit' => 200))->where(['role !=' => 'sa'])->contain(['Company']);
-
             $terms1= array_diff($terms1, array(''));
             $this->set('users', $users);
         }
-
         $this->set(compact('search'));
-
     }
-
     /**
     * Metodo para cambiar la contraseña en caso de olvidarla - rol = all
     */
@@ -538,8 +401,6 @@ class UsersController extends AppController
         ]);
         $tabletoken = TableRegistry::get('Token');
         $tok = $tabletoken->find()->where(['user_id' => $user->id, 'active' => 0])->last();
-
-
         if ($this->request->is(['patch', 'post', 'put'])) {
             if (($token != null) && ($tok->value != null)) {
                     if(strcmp($tok->value,$token) === 0){
@@ -564,5 +425,4 @@ class UsersController extends AppController
         }
         $this->set(compact('user'));
     }
-
 }

@@ -26,7 +26,11 @@ class MedioController extends AppController
                 return true;
             }
         }
-
+        if(isset($user['role']) && $user['role'] === 'staff'){
+            if(in_array($this->request->action, ['index', 'edit2'])){
+                return true;
+            }
+        }
 
         return parent::isAuthorized($user);
     }

@@ -40,7 +40,7 @@
               <ul class="dropdown-menu">
                 <li> <?php echo $this->Html->link('Medios', array('controller' => 'Medio', 'action' => 'lista')); ?> </li>
                 <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index')); ?></li>
-                <li><?= $this->Html->link('Ediar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
               </ul>
             </li>
             <li class="dropdown">
@@ -62,6 +62,16 @@
 
           <?php if ($current_user['role'] == 'admin'): ?>  <!-- menu para admin -->
             <li><?= $this->Html->link('Inicio', array('controller' => 'Users', 'action' => 'home')); ?></li>
+            <li><?= $this->Html->link('Generar Clave', array('controller' => 'Clave', 'action' => 'add')); ?></li>
+            <li><?= $this->Html->link('Reportes', array('controller' => 'Reporte', 'action' => 'index')); ?></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notificaciones<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?= $this->Html->link('Todas las Notificaciones', array('controller' => 'Notificacion', 'action' => 'index')); ?></li>
+                <li><?= $this->Html->link('Mis Notificaciones', array('controller' => 'Notificacion', 'action' => 'viewadmin', $current_user['id'])); ?></li>
+                
+              </ul>
+            </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculos <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -73,25 +83,32 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medios de envio<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index', $current_user['id'])); ?></li>
-                <li><?= $this->Html->link('Ediar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
               </ul>
             </li>
-            <li><?= $this->Html->link('Generar Clave', array('controller' => 'Clave', 'action' => 'add')); ?></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notificaciones<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><?= $this->Html->link('Todas las Notificaciones', array('controller' => 'Notificacion', 'action' => 'index')); ?></li>
-                <li><?= $this->Html->link('Mis Notificaciones', array('controller' => 'Notificacion', 'action' => 'viewadmin', $current_user['id'])); ?></li>
-                
-              </ul>
-            </li>
-            <li><?= $this->Html->link('Reportes', array('controller' => 'Reporte', 'action' => 'index')); ?></li>
           <?php endif; ?>
 
 
           <?php if ($current_user['role'] == 'staff'): ?>  <!-- menu para staff -->
             <li><?= $this->Html->link('Inicio', array('controller' => 'Users', 'action' => 'home')); ?></li>
             <li><?= $this->Html->link('Notificar', array('controller' => 'Notificacion', 'action' => 'add')); ?></li>
+             <li><?= $this->Html->link('Registros', array('controller' => 'Ingreso', 'action' => 'index')); ?></li>
+             <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculos <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?= $this->Html->link('Mis Vehiculos', array('controller' => 'Vehiculo', 'action' => 'view', $current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Nuevo Vehiculo', array('controller' => 'Vehiculo', 'action' => 'add')); ?></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medios de envio<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index',$current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
+              </ul>
+            </li>
+
+
           <?php endif; ?>
 
           <?php if ($current_user['role'] == 'user'): ?>  <!-- menu para usuario -->
@@ -107,7 +124,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medios de envio<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index',$current_user['id'])); ?></li>
-                <li><?= $this->Html->link('Ediar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
               </ul>
             </li>
             <li><?= $this->Html->link('Ingresos', array('controller' => 'Ingreso', 'action' => 'view', $current_user['id'])); ?></li>
