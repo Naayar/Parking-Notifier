@@ -54,16 +54,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.55.2",
+            "version": "3.55.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3be3068a3a643f5029f18714b3fe26733a51e07c"
+                "reference": "28a1828814ce34d056492fa494f1e4bbaddaf33e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3be3068a3a643f5029f18714b3fe26733a51e07c",
-                "reference": "3be3068a3a643f5029f18714b3fe26733a51e07c",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/28a1828814ce34d056492fa494f1e4bbaddaf33e",
+                "reference": "28a1828814ce34d056492fa494f1e4bbaddaf33e",
                 "shasum": ""
             },
             "require": {
@@ -130,20 +130,20 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-04-25T18:33:29+00:00"
+            "time": "2018-04-26T21:09:13+00:00"
         },
         {
             "name": "cakephp/cakephp",
-            "version": "3.5.15",
+            "version": "3.5.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cakephp/cakephp.git",
-                "reference": "d4e2693f033392333577478b61af757927b2f9c7"
+                "reference": "da27675395d1dbb6cd8ef122d228c52033f272c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/d4e2693f033392333577478b61af757927b2f9c7",
-                "reference": "d4e2693f033392333577478b61af757927b2f9c7",
+                "url": "https://api.github.com/repos/cakephp/cakephp/zipball/da27675395d1dbb6cd8ef122d228c52033f272c2",
+                "reference": "da27675395d1dbb6cd8ef122d228c52033f272c2",
                 "shasum": ""
             },
             "require": {
@@ -216,7 +216,7 @@
                 "rapid-development",
                 "validation"
             ],
-            "time": "2018-04-14T17:20:49+00:00"
+            "time": "2018-04-28T02:16:35+00:00"
         },
         {
             "name": "cakephp/chronos",

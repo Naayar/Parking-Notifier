@@ -41,7 +41,7 @@ class IngresoController extends AppController
             }
         }
         if(isset($user['role']) && $user['role'] === 'staff'){
-            if(in_array($this->request->action, ['add'])){
+            if(in_array($this->request->action, ['add','index'])){
                 return true;
             }
         }
@@ -62,7 +62,9 @@ class IngresoController extends AppController
      */
     public function index()
     {
-        $ingreso = $this->paginate($this->Ingreso);
+        $now = new Time();
+        $now->timezone = 'America/Bogota';
+        $ingreso = $this->paginate($this->Ingreso->find()->where(['day(entrada)' => $now->day,'month(entrada)' => $now->month, 'year(entrada)' => $now->year])->contain(['Users.Vehiculo']));
         $this->set(compact('ingreso'));
     }
 

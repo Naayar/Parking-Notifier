@@ -9,7 +9,7 @@
 		<?= $this->Form->create($user, ['novalidate']) ?>
 		<fieldset>
 			<?php 
-				echo $this->Form->input('codigo', ['label' => 'Código']);
+				echo $this->Form->input('codigo', ['label' => 'Código', 'autofocus']);
 				echo $this->Form->input('cedula', ['label' => 'Identificación']);
 				echo $this->Form->input('name', ['label' => 'Nombres']);
 				echo $this->Form->input('lastName', ['label' => 'Apellidos']);

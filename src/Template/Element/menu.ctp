@@ -40,7 +40,7 @@
               <ul class="dropdown-menu">
                 <li> <?php echo $this->Html->link('Medios', array('controller' => 'Medio', 'action' => 'lista')); ?> </li>
                 <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index')); ?></li>
-                <li><?= $this->Html->link('Ediar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
               </ul>
             </li>
             <li class="dropdown">
@@ -73,7 +73,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medios de envio<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index', $current_user['id'])); ?></li>
-                <li><?= $this->Html->link('Ediar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
               </ul>
             </li>
             <li><?= $this->Html->link('Generar Clave', array('controller' => 'Clave', 'action' => 'add')); ?></li>
@@ -92,6 +92,22 @@
           <?php if ($current_user['role'] == 'staff'): ?>  <!-- menu para staff -->
             <li><?= $this->Html->link('Inicio', array('controller' => 'Users', 'action' => 'home')); ?></li>
             <li><?= $this->Html->link('Notificar', array('controller' => 'Notificacion', 'action' => 'add')); ?></li>
+            <li><?= $this->Html->link('Registros', array('controller' => 'Ingreso', 'action' => 'index')); ?></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculo<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?= $this->Html->link('Mis Vehiculos', array('controller' => 'Vehiculo', 'action' => 'view', $current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Nuevo Vehiculo', array('controller' => 'Vehiculo', 'action' => 'add')); ?></li>
+                <li><?= $this->Html->link('Ingresos', array('controller' => 'Ingreso', 'action' => 'view', $current_user['id'])); ?></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medio<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index')); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
+              </ul>
+            </li>
           <?php endif; ?>
 
           <?php if ($current_user['role'] == 'user'): ?>  <!-- menu para usuario -->
@@ -107,7 +123,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medios de envio<span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index',$current_user['id'])); ?></li>
-                <li><?= $this->Html->link('Ediar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
               </ul>
             </li>
             <li><?= $this->Html->link('Ingresos', array('controller' => 'Ingreso', 'action' => 'view', $current_user['id'])); ?></li>

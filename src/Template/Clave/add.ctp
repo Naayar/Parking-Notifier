@@ -27,7 +27,7 @@ function generaPass(){
 		</div>
 	</div>	
 	<div class="col-sm-4 col-sm-offset-2">
-		<?php echo $this->Form->create($clave, ['novalidate']); ?>
+		<?php echo $this->Form->create(); ?>
 		<div class="form-group">
 			<?php echo $this->Form->input('valor', ['label' => 'Valor', 'value' => generaPass()]); ?>
 		</div>

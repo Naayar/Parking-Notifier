@@ -10,18 +10,29 @@
 				<?php 
 
 				foreach ($eventos as $e) {
-					if($e == 1){
+					if ($otro != "") {
+						if($e == 1){
 						echo "Llaves olvidadas<br>";
-					}else if ($e == 2){
-						echo "Alarma sonando<br>";
-					}else if($e == 3){
-						echo "Vehículo encendido<br>";
-					}else if($e == 4){
-						echo "Baúl abierto<br>";
+						}else if ($e == 2){
+							echo "Alarma sonando<br>";
+						}else if($e == 3){
+							echo "Vehículo encendido<br>";
+						}else if($e == 4){
+							echo "Baúl abierto<br>";
+						}
+						echo $otro.'<br><br>';
+					}else{
+						if($e == 1){
+						echo "Llaves olvidadas<br>";
+						}else if ($e == 2){
+							echo "Alarma sonando<br>";
+						}else if($e == 3){
+							echo "Vehículo encendido<br>";
+						}else if($e == 4){
+							echo "Baúl abierto<br>";
+						}
+						echo "<br>";
 					}
-				}
-				if($otro != ""){
-					echo $otro.'<br><br><br>';
 				}
 				 ?>
 				Un gran saludo de parte de Parking Notifier.<br>No responder a este correo. Mensaje enviado desde el sistema automatico de Parking Notifier </p>

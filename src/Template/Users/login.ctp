@@ -10,7 +10,7 @@
 				<h2>Ingresa tus datos</h2>
 			</div>
 			<div class="form-group">
-				<?= $this->Form->input('email', ['class' => 'form-control input-lg', 'placeholder' => 'Correo', 'label' => false, 'required']) ?>
+				<?= $this->Form->input('email', ['class' => 'form-control input-lg', 'placeholder' => 'Correo', 'label' => false, 'required', 'autofocus']) ?>
 			</div>
 			<div class="form-group">
 				<?= $this->Form->input('password', ['class' => 'form-control input-lg', 'placeholder' => 'contraseña', 'label' => false, 'required']) ?>

@@ -23,6 +23,11 @@ class VehiculoController extends AppController
                 return true;
             }
         }
+        if(isset($user['role']) && $user['role'] === 'staff'){
+            if(in_array($this->request->action, ['index','view', 'add', 'delete','edit'])){
+                return true;
+            }
+        }
         return parent::isAuthorized($user);
     }
 
@@ -88,7 +93,7 @@ class VehiculoController extends AppController
             $vehiculo->placa = strtoupper($vehiculo->placa);
             $vehiculo->user_id = $this->Auth->user('id');
             if ($this->Vehiculo->save($vehiculo)) {
-                $this->Flash->success(__('El vehiculo ha sido guardado.'));
+                $this->Flash->success(__('El vehiculo ha sido guardado. Por favor selecciona los medios por los cuales se te notificará'));
 
                 return $this->redirect(['controller' => 'Medio', 'action' => 'edit2', $this->Auth->user('id')]);
             }
