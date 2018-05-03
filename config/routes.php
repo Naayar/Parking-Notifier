@@ -108,6 +108,7 @@ Router::scope('/staff', function (RouteBuilder $routes) {
     $routes->connect('/ingresoysalida', ['controller' => 'ingreso', 'action' => 'add']);    
     $routes->connect('/notificaciones/nuevo', ['controller' => 'Notificacion', 'action' => 'add']);
     $routes->connect('/registros', ['controller' => 'Notificacion', 'action' => 'index']);
+    $routes->connect('/ingreso/historial', ['controller' => 'Ingreso', 'action' => 'index']);
 });
 
 /**

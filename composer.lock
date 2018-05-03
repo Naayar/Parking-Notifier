@@ -54,6 +54,7 @@
         },
         {
             "name": "aws/aws-sdk-php",
+
             "version": "3.55.5",
             "source": {
                 "type": "git",
@@ -64,6 +65,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/12152498f9c6f5595ebdeb4ec3d8b45379843bf4",
                 "reference": "12152498f9c6f5595ebdeb4ec3d8b45379843bf4",
+
+            "version": "3.55.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aws/aws-sdk-php.git",
+                "reference": "28a1828814ce34d056492fa494f1e4bbaddaf33e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/28a1828814ce34d056492fa494f1e4bbaddaf33e",
+                "reference": "28a1828814ce34d056492fa494f1e4bbaddaf33e",
+
                 "shasum": ""
             },
             "require": {
@@ -118,7 +131,7 @@
                     "homepage": "http://aws.amazon.com"
                 }
             ],
-            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+           "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
             "homepage": "http://aws.amazon.com/sdkforphp",
             "keywords": [
                 "amazon",
@@ -130,7 +143,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-05-02T19:55:35+00:00"
+            "time": "2018-04-26T21:09:13+00:00"
         },
         {
             "name": "cakephp/cakephp",

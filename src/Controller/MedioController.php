@@ -14,15 +14,21 @@ class MedioController extends AppController
     /**
     * Autoriza a los usuarios de tipo user y staff solo a ciertos metodos
     *bueno probemos esta vaina 
+    * Autoriza a los usuarios de tipo user, admin y staff solo a ciertos metodos
     */
     public function isAuthorized($user){
         if(isset($user['role']) && $user['role'] === 'user'){
-            if(in_array($this->request->action, ['index', 'edit2'])){
+            if(in_array($this->request->action, ['index', 'edit2', 'edit3'])){
                 return true;
             }
         }
         if(isset($user['role']) && $user['role'] === 'admin'){
-            if(in_array($this->request->action, ['index', 'edit2'])){
+            if(in_array($this->request->action, ['index', 'edit2','edit3'])){
+                return true;
+            }
+        }
+        if(isset($user['role']) && $user['role'] === 'staff'){
+            if(in_array($this->request->action, ['index', 'edit2', 'edit3'])){
                 return true;
             }
         }
@@ -31,6 +37,7 @@ class MedioController extends AppController
                 return true;
             }
         }
+
 
         return parent::isAuthorized($user);
     }
@@ -140,11 +147,11 @@ class MedioController extends AppController
      */
     public function edit2($id)
     {
-        $medios = $this->Medio->find('all')->where(['id !=' => 2]);
+        $medios = $this->Medio->find('all')->where(['id' => 1]);
+        $user = TableRegistry::get('Users')->get($this->Auth->user('id'));
         if ($this->request->is('post')) {
             $idmedio = $this->request->getData('id');
             $medio = $this->Medio->get($idmedio);
-            $user = TableRegistry::get('Users')->get($id);
 
             $user_medio = TableRegistry::get('users_medio');
             $usermedio = TableRegistry::get('users_medio')->find()->where(['medio_id' => $medio->id, 'user_id' => $user->id])->first();
@@ -155,13 +162,13 @@ class MedioController extends AppController
                     ->set(['active' => 1])
                     ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
                     ->execute();
-                    $this->Flash->success(__('El medio ha sido seleccionado satisfactoriamente.'));
+                    $this->Flash->success(__('El medio '.$medio->nombre.' ha sido seleccionado satisfactoriamente.'));
                 }else{
                     $user_medio->query()->update()
                     ->set(['active' => 0])
                     ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
                     ->execute();
-                    $this->Flash->success(__('El medio ha sido desactivado satisfactoriamente.'));
+                    $this->Flash->success(__('El medio '.$medio->nombre.' ha sido desactivado satisfactoriamente.'));
                 }
             }else{
                 $this->Medio->Users->link($medio, [$user]);
@@ -169,12 +176,67 @@ class MedioController extends AppController
                     ->set(['active' => 1])
                     ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
                     ->execute();
-                $this->Flash->success(__('El medio ha sido seleccionado satisfactoriamente.'));
+                $this->Flash->success(__('El medio'.$medio->nombre.' ha sido seleccionado satisfactoriamente.'));
             }
 
             
         }
         $this->set(compact('medios'));
+        $this->set(compact('user'));
+    }
+
+    public function edit3()
+    {
+        $numero = $this->request->getData('phone');
+        $medios = $this->Medio->find('all')->where(['id' => 1]);
+        $users = TableRegistry::get('Users');
+        $user = TableRegistry::get('Users')->get($this->Auth->user('id'));
+        if ($this->request->is('post')) {
+            $idmedio = $this->request->getData('id');
+            $medio = $this->Medio->get($idmedio);
+
+            $query = $users->query()->update()
+            ->set(['phone' => $numero])
+            ->where(['id' => $this->Auth->user('id')])
+            ->execute();
+
+            $user_medio = TableRegistry::get('users_medio');
+            $usermedio = TableRegistry::get('users_medio')->find()->where(['medio_id' => $medio->id, 'user_id' => $user->id])->first();
+
+            if($usermedio){
+                if($usermedio->active == 0){
+                    $user_medio->query()->update()
+                    ->set(['active' => 1])
+                    ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+                    ->execute();
+                    $this->Flash->success(__('El medio '.$medio->nombre.' ha sido seleccionado satisfactoriamente.'));
+                    return $this->redirect(['action' => 'edit2',$this->Auth->user('id')]);
+                }else{
+                    $user_medio->query()->update()
+                    ->set(['active' => 0])
+                    ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+                    ->execute();
+                    $this->Flash->success(__('El medio '.$medio->nombre.' ha sido desactivado satisfactoriamente.'));
+                    return $this->redirect(['action' => 'edit2',$this->Auth->user('id')]);
+                }
+            }else{
+                $this->Medio->Users->link($medio, [$user]);
+                $user_medio->query()->update()
+                    ->set(['active' => 1])
+                    ->where(['user_id' => $user->id, 'medio_id' => $medio->id])
+                    ->execute();
+                $this->Flash->success(__('El medio'.$medio->nombre.' ha sido seleccionado satisfactoriamente.'));
+                return $this->redirect(['action' => 'edit2',$this->Auth->user('id')]);
+            }
+
+            
+        }
+
+
+
+
+        $this->autoRender = false;
+        
     }
 
     /**

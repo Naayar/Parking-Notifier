@@ -66,6 +66,7 @@ class ClaveController extends AppController
         $clave = $this->Clave->newEntity();
         if ($this->request->is('post')) {
             $clave = $this->Clave->patchEntity($clave, $this->request->getData());
+            $contra = $this->request->getData('valor');
             $clave->active = 1;
             $clave->company_id = $this->Auth->user('company_id');
             if ($this->Clave->save($clave)) {
@@ -76,7 +77,7 @@ class ClaveController extends AppController
                     ->subject('Contraseña')
                     ->template('clave')
                     ->emailFormat('html')
-                    ->viewVars(['value' => $clave])
+                    ->viewVars(['value' => $contra])
                     ->send();
                 return $this->redirect(['controller' => 'users', 'action' => 'home']);
             }

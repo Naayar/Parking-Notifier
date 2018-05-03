@@ -4,6 +4,8 @@ use App\Controller\AppController;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\Email;
+use Cake\I18n\Time;
+use Cake\I18n\Date;
 use Cake\Database\Connection;
 require_once 'autoload.php';
 
@@ -196,6 +198,8 @@ class UsersController extends AppController
     */
     public function add2()
     {
+        $now = new Time();
+        $now->timezone = 'America/Bogota';
         $claveinput = $this->request->getData('clave');
         $emailinput = $this->request->getData('email');
         $c = TableRegistry::get('clave');
@@ -216,19 +220,21 @@ class UsersController extends AppController
                         ->where(['id' => $clave->id])
                         ->execute();
                     if ($this->request->is('post')) {
-                        $user = $this->Auth->identify();
+                        //$user = $this->Auth->identify();
                         if ($user) {
                             $email = new Email();
                             $email->from(['numeroceroseis@hotmail.com' => 'Parking Notifier'])
                                 ->to($user->email)
                                 ->subject('Registro Exceptionitoso')
                                 ->template('newUser')
+                                ->subject('Registro Exitoso')
+                                ->template('new_user')
                                 ->emailFormat('html')
-                                ->viewVars(['user' => $user->id, 'name' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
+                                ->viewVars(['user' => $user->id, 'name' => $user->name, 'empresa' => $cname->name,'fecha' => $now])
                                 ->send();
                             $this->Auth->setUser($user);
                             $this->Flash->success(__('El usuario ha sido creado. Por favor selecciona tu oficina'));
-                            return $this->redirect(['controller' => 'Sucursal', 'action' => 'firstadd', $$user->company_id]);
+                            return $this->redirect(['controller' => 'Sucursal', 'action' => 'firstadd', $cname->id]);
                         }else {
                             echo $this->Flash->error('No se ha podido iniciar sesion');
                         } 

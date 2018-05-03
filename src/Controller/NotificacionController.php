@@ -53,10 +53,17 @@ class NotificacionController extends AppController
      */
     public function index()
     {
+        $user =TableRegistry::get('users');
         $notificacion = $this->paginate($this->Notificacion->find('all')->contain(['users'])->where(['company_id' => $this->Auth->user('company_id')]));
+        foreach ($notificacion as $noti) {
+            $user1[] = $user->get($noti->user_id_origen);
+            $user2[] = $user->get($noti->user_id_destino);
+        }
+
 
         $this->set(compact('notificacion'));
-        $this->set('_serialize', ['notificacion']);
+        $this->set(compact('user1'));
+        $this->set(compact('user2'));
     }
 
     /**
@@ -208,6 +215,53 @@ class NotificacionController extends AppController
                             }
                         }
                         
+                        return $this->redirect(['controller' => 'ingreso','action' => 'add']);
+                    }
+                            $sns = \Aws\Sns\SnsClient::factory(array(
+                                'credentials' => [
+                                    'key'    => 'AKIAIGSSCIACXX3BBKFA',
+                                    'secret' => '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',
+                                ],
+                                'region' => 'us-east-1',
+                                'version'  => 'latest',
+                            ));
+                            $nmsm=explode(" ", $user->name);
+                            $result = $sns->publish([
+                                'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse al parqueadero Gracias
+                                ', // REQUIRED
+                                'MessageAttributes' => [
+                                    'AWS.SNS.SMS.SenderID' => [
+                                        'DataType' => 'String', // REQUIRED
+                                        'StringValue' => 'nyan'
+                                    ],
+                                    'AWS.SNS.SMS.SMSType' => [
+                                        'DataType' => 'String', // REQUIRED
+                                        'StringValue' => 'Transactional' // or 'Promotional'
+                                    ]
+                                ],
+                                'PhoneNumber' => '57'.$user->phone,
+                            ]);
+                            error_log($result);
+                            $this->Flash->success(__('La notificación via mensaje de texto (SMS) ha sido enviada.'));
+                        }
+                    }
+                    $notificacion = $this->Notificacion->patchEntity($notificacion, $this->request->getData());
+                    $notificacion->fecha = $now;
+                    $notificacion->user_id_origen = $this->Auth->user('id');
+                    $notificacion->user_id_destino = $user->id;
+                    if ($this->Notificacion->save($notificacion)) {
+
+                        $evento_notificacion = TableRegistry::get('evento_notificacion');
+
+                        for ($i=1; $i<=4 ; $i++) { 
+                            if(isset($_POST[$i]) ){
+                                if($_POST[$i] != '0'){
+                                    $evento = TableRegistry::get('evento')->get($i);
+                                    $this->Notificacion->Evento->link($notificacion, [$evento]);
+                                }
+
+                            }
+                        }
                         return $this->redirect(['controller' => 'ingreso','action' => 'add']);
                     }
                     $this->Flash->error(__('La notificación al correo no pudo ser enviada. Intente nuevamente'));

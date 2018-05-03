@@ -16,17 +16,27 @@
 	    	</tr>
 	  	</thead>
 	  	<tbody>
-	    	<?php foreach ($notificacion as $noti): ?>
+	  		<?php 
+	  		foreach ($user1 as $holi) {
+	  			$nombre1[]=$holi->name;
+	  		}foreach ($user2 as $holi2) {
+	  			$nombre2[]=$holi2->name;
+	  		}
+	  		?>
+	    	<?php $i =0; 
+	    	foreach ($notificacion as $noti):
+	    	 ?>	    				
 			<tr>
 			  <td><?= $noti->id ?></td>
 			  <td><?= $noti->fecha ?></td>
-			  <td><?= $noti->user_id_origen  ?></td>
-			  <td><?= $noti->user_id_destino  ?></td>
+			  <td><?= $nombre1[$i]  ?></td>
+			  <td><?= $nombre2[$i] ?></td>
 			  <td class="actions">
 			  	<?=  $this->Html->link(('Detalle'), array('controller' => 'Notificacion', 'action' => 'view', $noti->id), ['class' => 'btn btn-primary']); ?>
 			  </td>
 			</tr>
-	    	<?php endforeach; ?>
+	    	<?php $i++; 
+	    	endforeach; ?>
 	  	</tbody>
 	  </table>
 	  <div class="paginator">

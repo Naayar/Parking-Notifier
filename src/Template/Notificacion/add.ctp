@@ -52,7 +52,7 @@ break
 
 } 
 if(!valido){ 
-alert("Por favor seleccone un evento");return false 
+alert("Por favor seleccione un evento");return false 
 } 
 
 }  
