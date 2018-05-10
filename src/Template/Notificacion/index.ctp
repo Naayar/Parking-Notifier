@@ -1,6 +1,7 @@
 <title>
 	Parking Notifier - Admin - notificaciones
 </title>
+<body>
 <div class="col-sm-8 col-sm-offset-2">
 	<div class="table-responsive">
 	  <table class="table table-hover table-bordered table-striped">
@@ -39,14 +40,12 @@
 	    	endforeach; ?>
 	  	</tbody>
 	  </table>
-	  <div class="paginator">
-	  	<ul class="pagination">
-	  		<?= $this->Paginator->prev('< '. __('Anterior')) ?>
-	  		<?= $this->Paginator->numbers() ?>
-	  		<?= $this->Paginator->next(__('Siguiente') . ' >') ?>
-	  	</ul>
-	  	<p><?= $this->Paginator->counter('Página {{page}} de {{pages}}, mostrando {{current}} resultados de 
-     {{count}} total(es)') ?></p>
-	  </div>
+	  			<ul class="pagination">
+	  				<?= $this->Paginator->prev('< '. __('Anterior')) ?>
+	  				<?= $this->Paginator->numbers() ?>
+	  				<?= $this->Paginator->next(__('Siguiente') . ' >') ?>
+	  			</ul>
+	  			<p><?= $this->Paginator->counter('Página {{page}} de {{pages}}, mostrando {{current}} resultados de {{count}} total(es)') ?></p>
 	</div>
 </div>
+</body>

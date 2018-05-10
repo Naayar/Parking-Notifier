@@ -51,6 +51,9 @@
 					</ul>
 				<?php endforeach ?>
 			</div>
+			<div class="col-sm-6">
+			<?=  $this->Html->link(('Volver'), array('controller' => 'Notificacion', 'action' => 'index'), ['class' => 'btn btn-primary btn-block']); ?>
+			</div>
 		</div>
 	</div>
 </div>

@@ -23,7 +23,7 @@
 			 ?>
 		</div>
 	</div>
-	<p>Editado desde la laptop, no lo puedo creer</p>
+	<p></p>
 
 <?php endif ?>
 
@@ -55,7 +55,7 @@
 						  	<tbody>
 						    	<?php foreach ($staff as $user): ?>
 								<tr>
-								  <td><?= $user->codigo ?></td>
+								  <td><?= $user->codigo ?> codigo</td>
 								  <td><?= $user->name ?></td>
 								  <td><?= $user->lastName ?></td>
 								  <td><?= $user->email ?></td>

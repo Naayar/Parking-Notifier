@@ -2,13 +2,15 @@
 <html>
 <head>
     <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <?= $this->Html->meta('icon') ?>
 
+    <?= $this->Html->script('jquery-3.2.1.min.js') ?>
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('style.css') ?>
     <?= $this->Html->css('jquery-ui.min.css') ?>
+    <?= $this->Html->script('bootstrap.min.js') ?>
     
 
     <?= $this->fetch('meta') ?>
@@ -16,6 +18,7 @@
     <?= $this->fetch('script') ?>
 </head>
 <body>
+
     <?= $this->element('menu') ?>
     <div class="container-fluid">
         <div class="col-sm-8 col-sm-offset-2">
@@ -23,6 +26,7 @@
         </div>   
             <?= $this->fetch('content') ?>
     </div>
+
     <?= $this->element('footer') ?>
 </body>
     <?= $this->Html->script(['jquery-3.2.1.min.js', 'bootstrap.min.js', 'jquery-ui.min.js', 'search.js']) ?>

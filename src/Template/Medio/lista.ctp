@@ -19,5 +19,6 @@
 		</div>
 		<br>
 		<?php echo $this->Html->link('Nuevo', array('controller' => 'Medio', 'action' => 'add'), ['class' => 'btn btn-danger pull-right']); ?>
+
 	</div>
 </div>

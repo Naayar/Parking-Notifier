@@ -1,8 +1,9 @@
+
 <nav class="navbar navbar-inverse ">
       <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" id="test" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -63,7 +64,7 @@
           <?php if ($current_user['role'] == 'admin'): ?>  <!-- menu para admin -->
             <li><?= $this->Html->link('Inicio', array('controller' => 'Users', 'action' => 'home')); ?></li>
             <li><?= $this->Html->link('Generar Clave', array('controller' => 'Clave', 'action' => 'add')); ?></li>
-            <li><?= $this->Html->link('Reportes', array('controller' => 'Reporte', 'action' => 'index')); ?></li>
+            <!-- <li><?= $this->Html->link('Reportes', array('controller' => 'Reporte', 'action' => 'index')); ?></li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notificaciones<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -73,28 +74,21 @@
               </ul>
             </li>
             <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medio<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index')); ?></li>
+                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
+              </ul>
+            </li>
+            <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculos <span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><?= $this->Html->link('Mis Vehiculos', array('controller' => 'Vehiculo', 'action' => 'view',$current_user['id'])); ?></li>
                 <li><?= $this->Html->link('Nuevo Vehiculo', array('controller' => 'Vehiculo', 'action' => 'add')); ?></li>
+                 <li><?= $this->Html->link('Ingresos', array('controller' => 'Ingreso', 'action' => 'view', $current_user['id'])); ?></li>
               </ul>
             </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medios de envio<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index', $current_user['id'])); ?></li>
-                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?></li>
-              </ul>
-            </li>
-            <li><?= $this->Html->link('Generar Clave', array('controller' => 'Clave', 'action' => 'add')); ?></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Notificaciones<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><?= $this->Html->link('Todas las Notificaciones', array('controller' => 'Notificacion', 'action' => 'index')); ?></li>
-                <li><?= $this->Html->link('Mis Notificaciones', array('controller' => 'Notificacion', 'action' => 'viewadmin', $current_user['id'])); ?></li>
-
-              </ul>
-            </li>
+           
           <?php endif; ?>
 
 
@@ -108,6 +102,7 @@
               <ul class="dropdown-menu">
                 <li><?= $this->Html->link('Mis Vehiculos', array('controller' => 'Vehiculo', 'action' => 'view', $current_user['id'])); ?></li>
                 <li><?= $this->Html->link('Nuevo Vehiculo', array('controller' => 'Vehiculo', 'action' => 'add')); ?></li>
+                 <li><?= $this->Html->link('Ingresos', array('controller' => 'Ingreso', 'action' => 'view', $current_user['id'])); ?></li>
               </ul>
             </li>
             <li class="dropdown">
@@ -118,25 +113,6 @@
               </ul>
             </li>
 
-
-=======
-            <li><?= $this->Html->link('Registros', array('controller' => 'Ingreso', 'action' => 'index')); ?></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Vehiculo<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><?= $this->Html->link('Mis Vehiculos', array('controller' => 'Vehiculo', 'action' => 'view', $current_user['id'])); ?></li>
-                <li><?= $this->Html->link('Nuevo Vehiculo', array('controller' => 'Vehiculo', 'action' => 'add')); ?></li>
-                <li><?= $this->Html->link('Ingresos', array('controller' => 'Ingreso', 'action' => 'view', $current_user['id'])); ?></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Medio<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><?= $this->Html->link('Lista Medios', array('controller' => 'Medio', 'action' => 'index')); ?></li>
-                <li><?= $this->Html->link('Editar Medios ', array('controller' => 'Medio', 'action' => 'edit2', $current_user['id'])); ?>
-              </ul>
-            </li>
->>>>>>> 2dbd74ae84b19ac7ecdb68b6027db9d8595ec637
           <?php endif; ?>
 
           <?php if ($current_user['role'] == 'user'): ?>  <!-- menu para usuario -->

@@ -123,7 +123,7 @@ class NotificacionController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+public function add()
     {
         $notificacion = $this->Notificacion->newEntity();
         $eventoos = TableRegistry::get('evento')->find('all');
@@ -157,6 +157,7 @@ class NotificacionController extends AppController
 
                     foreach ($medios as $m) {
                         if($m->id == 1){
+
                             $email = new Email();
                             $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
                                 ->to($user->email)
@@ -168,55 +169,6 @@ class NotificacionController extends AppController
                             $this->Flash->success(__('La notificación al correo ha sido enviada con exito.'));
 
                         }else if($m->id == 3){
-                             $sns = \Aws\Sns\SnsClient::factory(array(
-                            'credentials' => [
-                                'key'    => 'AKIAIGSSCIACXX3BBKFA',
-                                'secret' => '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',
-                            ],
-                            'region' => 'us-east-1',
-                            'version'  => 'latest',
-                        ));
-                        $nmsm=explode(" ", $user->name);
-                        $result = $sns->publish([
-                            'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse al parqueadero Gracias
-                            ', // REQUIRED
-                            'MessageAttributes' => [
-                                'AWS.SNS.SMS.SenderID' => [
-                                    'DataType' => 'String', // REQUIRED
-                                    'StringValue' => 'nyan'
-                                ],
-                                'AWS.SNS.SMS.SMSType' => [
-                                    'DataType' => 'String', // REQUIRED
-                                    'StringValue' => 'Transactional' // or 'Promotional'
-                                ]
-                            ],
-                            'PhoneNumber' => '57'.$user->phone,
-                        ]);
-                        error_log($result);
-                        $this->Flash->success(__('La notificación via mensaje de texto (SMS) ha sido enviada.'));
-
-                        }
-                    }
-                    $notificacion = $this->Notificacion->patchEntity($notificacion, $this->request->getData());
-                    $notificacion->fecha = $now;
-                    $notificacion->user_id_origen = $this->Auth->user('id');
-                    $notificacion->user_id_destino = $user->id;
-                    if ($this->Notificacion->save($notificacion)) {
-
-                        $evento_notificacion = TableRegistry::get('evento_notificacion');
-
-                        for ($i=1; $i<=4 ; $i++) { 
-                            if(isset($_POST[$i]) ){
-                                if($_POST[$i] != '0'){
-                                    $evento = TableRegistry::get('evento')->get($i);
-                                    $this->Notificacion->Evento->link($notificacion, [$evento]);
-                                }
-
-                            }
-                        }
-                        
-                        return $this->redirect(['controller' => 'ingreso','action' => 'add']);
-                    }
                             $sns = \Aws\Sns\SnsClient::factory(array(
                                 'credentials' => [
                                     'key'    => 'AKIAIGSSCIACXX3BBKFA',
@@ -227,7 +179,7 @@ class NotificacionController extends AppController
                             ));
                             $nmsm=explode(" ", $user->name);
                             $result = $sns->publish([
-                                'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse al parqueadero Gracias
+                                'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse al parqueaderoGracias
                                 ', // REQUIRED
                                 'MessageAttributes' => [
                                     'AWS.SNS.SMS.SenderID' => [
@@ -289,7 +241,6 @@ class NotificacionController extends AppController
         $this->set(compact('vehiculo'));
         $this->set(compact('medios'));
     }
-
 
     /**
      * Edit method

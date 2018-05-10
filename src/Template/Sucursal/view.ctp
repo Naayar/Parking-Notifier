@@ -17,7 +17,7 @@
 		  <li class="list-group-item"><p class="text-danger">Id:</p><?= ' '.$sucursal->id ?></li>
 		  <li class="list-group-item"><p class="text-danger">Nombre:</p><?= ' '. $sucursal->name ?></li>
 		  <li class="list-group-item"><p class="text-danger">Teléfono:</p><?= ' '. $sucursal->phone ?></li>
-		  <li class="list-group-item"><p class="text-danger">Dirección:</p><?= ' '.$sucursal->addresss ?></li>
+		  <li class="list-group-item"><p class="text-danger">Dirección:</p><?= ' '.$sucursal->address ?></li>
 		</ul>
 	</div>
 	<div class="col-md-4">
