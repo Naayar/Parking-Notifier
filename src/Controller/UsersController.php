@@ -351,6 +351,29 @@ class UsersController extends AppController
     */
     public function start()
     {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            $clave = $this->request->getData('clave');
+            $user->role = 'staff';
+            $user->active = 1;
+            $user->company_id = $this->Auth->user('company_id');
+            $cname = $this->Users->Company->find()->where(['Company.id' => $this->Auth->user('company_id')])->first();
+            if ($this->Users->save($user)) {
+                $email = new Email();
+                $email->from(['cngarcia@gmail.com' => 'Parking Notifier'])
+                    ->to($user->email)
+                    ->subject('Registro Exitoso')
+                    ->template('staff')
+                    ->emailFormat('html')
+                    ->viewVars(['value' => $clave,'user' => $user->id, 'nombre' => $user->name, 'empresa' => $cname->name,'fecha' => $user->created])
+                    ->send();
+                $this->Flash->success(__('El usuario ha sido creado.'));
+                return $this->redirect(['action' => 'home']);
+            }
+            $this->Flash->error(__('El usuario no ha podido ser creado. Por favor intente nuevamente.'));
+        }
+        $this->set(compact('user'));
         $this->render();
     }
     /**

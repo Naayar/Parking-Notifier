@@ -21,8 +21,7 @@
 	  				<input type="checkbox" name="" id="CBotro" onclick="mostrar()"> Otro
 	  				<br><br>
 	  				<div id="oculto" style="display: none;">
-	  					<label for="otro">Otro</label>
-	  					<input name="otro" width="20" >
+	  					<?php echo $this->Form->input('otro', ['label' => 'otro']);?>
 	  				</div>
 	  				<br>
 	  				<?php echo $this->Form->submit('Enviar', ['class' => 'btn btn-danger pull-right']); ?>

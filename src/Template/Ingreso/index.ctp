@@ -32,6 +32,7 @@
 							foreach ($ingreso as $i) 
 								{?>
 							<?php
+
 								$user=$i->user;
 								$vehi=$user->vehiculo;
 								$cod=$i->user->codigo;
@@ -40,7 +41,7 @@
 									<td><?php echo $num ?></td>
 									<td><?php echo $cod ?></td>
 									<?php
-								foreach ($vehi as $ve ) { 
+								foreach ($vehi as $ve ) {
 									?>
 									<td><?php echo $ve->placa?></td>
 								<?php

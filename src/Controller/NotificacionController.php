@@ -171,16 +171,15 @@ public function add()
                         }else if($m->id == 3){
                             $sns = \Aws\Sns\SnsClient::factory(array(
                                 'credentials' => [
-                                    'key'    => 'AKIAIGSSCIACXX3BBKFA',
-                                    'secret' => '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',
+                                    'key'    => '',
+                                    'secret' => '',
                                 ],
                                 'region' => 'us-east-1',
                                 'version'  => 'latest',
                             ));
                             $nmsm=explode(" ", $user->name);
                             $result = $sns->publish([
-                                'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse al parqueaderoGracias
-                                ', // REQUIRED
+                                'Message' => 'ParkingNotifier Hola '.$nmsm[0].' se ha presentado un inconveniente con su vehículo acercarse parqueadero Gracias', // REQUIRED
                                 'MessageAttributes' => [
                                     'AWS.SNS.SMS.SenderID' => [
                                         'DataType' => 'String', // REQUIRED
