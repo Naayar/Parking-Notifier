@@ -171,8 +171,8 @@ public function add()
                         }else if($m->id == 3){
                             $sns = \Aws\Sns\SnsClient::factory(array(
                                 'credentials' => [
-                                    'key'    => '',
-                                    'secret' => '',
+                                    'key'    => 'key',
+                                    'secret' => 'secretkey',
                                 ],
                                 'region' => 'us-east-1',
                                 'version'  => 'latest',

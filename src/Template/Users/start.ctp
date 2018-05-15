@@ -27,25 +27,25 @@
 		  <!-- Wrapper for slides -->
 		  <div class="carousel-inner" role="listbox">
 		    <div class="item active"  style="height:150%" >
-		      <?php echo $this->Html->image("logoslide.PNG", ["alt" => "logoslide",'style'=>'width:100%']) ?>
+		      <?php echo $this->Html->image("logoslidepknf.PNG", ["alt" => "logoslide",'style'=>'width:100%']) ?>
 		      <div class="carousel-caption">
 		       
 		      </div>
 		    </div>
 		    <div class="item" style="height:150%">
-		      <?php echo $this->Html->image("primera.PNG", ["alt" => "primera",'style'=>'width:100%']) ?>
+		      <?php echo $this->Html->image("parking.PNG", ["alt" => "primera",'style'=>'width:100%']) ?>
 		      <div class="carousel-caption">
 		        <a href="https://www.freepik.es/fotos-vectores-gratis/coche">Coche de vector creado por Freepik</a>
 		      </div>
 		    </div>
 		    <div class="item" style="height:150%">
-		      <?php echo $this->Html->image("segunda.PNG", ["alt" => "segunda",'style'=>'width:100%']) ?>
+		      <?php echo $this->Html->image("idcard.PNG", ["alt" => "segunda",'style'=>'width:100%']) ?>
 		      <div class="carousel-caption">
 		        <a href='https://www.freepik.es/vector-gratis/mano-tenencia-identificacion-tarjeta_1355365.htm'>Designed by Freepik</a>
 		      </div>
 		    </div>
 		  <div class="item" style="height:150%">
-		      <?php echo $this->Html->image("tercera.PNG", ["alt" => "tercera",'style'=>'width:100%']) ?>
+		      <?php echo $this->Html->image("notifi.PNG", ["alt" => "tercera",'style'=>'width:100%']) ?>
 		      <div class="carousel-caption">
 		        <a href='https://www.freepik.es/vector-gratis/fondo-con-notificacionde-mensaje_1307935.htm'>Designed by Freepik</a>
 		      </div>
