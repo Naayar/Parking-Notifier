@@ -61,14 +61,16 @@ class VehiculoController extends AppController
 
         $this->set('vehiculo', $vehiculo);
         $this->set('_serialize', ['vehiculo']);
+        $this->set($id);
     }
 
     /**
      * Add method
-     *
+     * @param string|null $id Vehiculo id.
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function add()
+    public function add($id = null)
     {   
         $vehiculo = $this->Vehiculo->newEntity();
         if ($this->request->is('post')) {
@@ -82,7 +84,11 @@ class VehiculoController extends AppController
             }
             $this->Flash->error(__('El vehiculo no ha podido ser creado. Por favor intente nuevamente.'));
         }
+        $vehic = $this->Vehiculo->find('all')->contain(['users'])->where(['Vehiculo.user_id' => $id]);
+
         $this->set(compact('vehiculo'));
+        $this->set('vehic', $vehic);
+        $this->set('omeee',$id);
     }
 
     /**
@@ -106,8 +112,6 @@ class VehiculoController extends AppController
         }
         $this->set(compact('vehiculo'));
     }
-
-
 
 
     /**

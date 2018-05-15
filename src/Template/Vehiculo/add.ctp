@@ -13,4 +13,7 @@
 	  	<?php echo $this->Form->submit('Crear', ['class' => 'btn btn-danger pull-right']); ?>
 	  	<?php echo $this->Form->end(); ?>
 	</div>
+	<?php
+
+	 ?>
 </div>
